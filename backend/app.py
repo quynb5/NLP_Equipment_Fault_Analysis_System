@@ -92,3 +92,35 @@ def clear_history():
     """Delete all history records."""
     deleted_count = db.clear_all_history()
     return {"message": f"Deleted {deleted_count} records"}
+
+
+# ---------- Evaluation API ----------
+@app.get("/evaluation/summary")
+def evaluation_summary():
+    """
+    Get evaluation summary (accuracy, macro_f1, avg_latency_ms).
+    Reads from cached report file if available.
+    """
+    import json
+    from pathlib import Path
+
+    report_path = Path(__file__).resolve().parent / "evaluation" / "results" / "evaluation_report.json"
+
+    if not report_path.exists():
+        raise HTTPException(
+            status_code=404,
+            detail="Evaluation report not found. Run: python -m backend.evaluation.run_evaluation"
+        )
+
+    with open(report_path, "r", encoding="utf-8") as f:
+        report = json.load(f)
+
+    return {
+        "accuracy": report.get("accuracy", 0),
+        "macro_f1": report.get("f1_macro", 0),
+        "avg_latency_ms": report.get("latency", {}).get("mean_ms", 0),
+        "precision_macro": report.get("precision_macro", 0),
+        "recall_macro": report.get("recall_macro", 0),
+        "per_class": report.get("per_class", {}),
+    }
+

@@ -1,0 +1,11 @@
+﻿,Hoạt động ổn định,Quá nhiệt,Hỏng bạc đạn / vòng bi,Cháy cuộn dây / cháy motor,Sự cố điện,Quá tải cơ khí,Rò rỉ hệ thống,Hư hỏng cơ khí,Âm thanh bất thường,Giảm hiệu suất
+Hoạt động ổn định,15,0,0,0,0,0,0,0,0,0
+Quá nhiệt,1,12,0,0,0,2,0,0,0,0
+Hỏng bạc đạn / vòng bi,0,0,15,0,0,0,0,0,0,0
+Cháy cuộn dây / cháy motor,0,0,0,15,0,0,0,0,0,0
+Sự cố điện,0,0,0,0,14,0,0,0,0,1
+Quá tải cơ khí,0,0,0,0,0,15,0,0,0,0
+Rò rỉ hệ thống,5,0,0,0,0,0,10,0,0,0
+Hư hỏng cơ khí,3,0,0,0,0,1,0,11,0,0
+Âm thanh bất thường,2,0,6,0,0,0,0,0,7,0
+Giảm hiệu suất,3,0,0,0,0,0,0,0,0,12

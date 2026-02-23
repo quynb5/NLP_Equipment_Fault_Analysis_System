@@ -1,0 +1,602 @@
+[
+    {
+        "description": "Thiết bị hoạt động ổn định, mọi thứ bình thường",
+        "true_label": "Hoạt động ổn định"
+    },
+    {
+        "description": "Máy vận hành tốt, không phát hiện bất thường nào",
+        "true_label": "Hoạt động ổn định"
+    },
+    {
+        "description": "Hệ thống chạy êm, nhiệt độ ổn định, không rung",
+        "true_label": "Hoạt động ổn định"
+    },
+    {
+        "description": "Motor hoạt động bình thường, không có tiếng kêu lạ",
+        "true_label": "Hoạt động ổn định"
+    },
+    {
+        "description": "Bơm chạy tốt, không có vấn đề gì đáng lo ngại",
+        "true_label": "Hoạt động ổn định"
+    },
+    {
+        "description": "Thiết bị ổn định, chỉ số vận hành đều trong ngưỡng",
+        "true_label": "Hoạt động ổn định"
+    },
+    {
+        "description": "Máy nén hoạt động bình thường không có sự cố",
+        "true_label": "Hoạt động ổn định"
+    },
+    {
+        "description": "Quạt công nghiệp chạy êm ái không gặp trục trặc",
+        "true_label": "Hoạt động ổn định"
+    },
+    {
+        "description": "Thiết bị chạy ổn định suốt ca làm việc không có bất thường",
+        "true_label": "Hoạt động ổn định"
+    },
+    {
+        "description": "Tất cả đều tốt, motor êm, không nóng không rung",
+        "true_label": "Hoạt động ổn định"
+    },
+    {
+        "description": "Máy hoạt động tốt, không cần can thiệp bảo trì",
+        "true_label": "Hoạt động ổn định"
+    },
+    {
+        "description": "Hệ thống vận hành trơn tru, không phát hiện hư hỏng",
+        "true_label": "Hoạt động ổn định"
+    },
+    {
+        "description": "Động cơ chạy đều đặn, âm thanh bình thường",
+        "true_label": "Hoạt động ổn định"
+    },
+    {
+        "description": "Thiết bị đang chạy tốt, nhiệt ổn, không mùi lạ",
+        "true_label": "Hoạt động ổn định"
+    },
+    {
+        "description": "Máy bơm hoạt động ổn không có dấu hiệu bất thường",
+        "true_label": "Hoạt động ổn định"
+    },
+    {
+        "description": "Motor nóng ran, sờ vào bỏng da",
+        "true_label": "Quá nhiệt"
+    },
+    {
+        "description": "Nhiệt độ thiết bị tăng cao bất thường, vỏ máy nóng",
+        "true_label": "Quá nhiệt"
+    },
+    {
+        "description": "Máy nén nóng quá, hơi nóng bốc lên mạnh",
+        "true_label": "Quá nhiệt"
+    },
+    {
+        "description": "Thiết bị đang tỏa nhiệt rất mạnh, nóng hơn bình thường nhiều",
+        "true_label": "Quá nhiệt"
+    },
+    {
+        "description": "Vỏ motor nóng dữ dội, nhiệt độ đo được rất cao",
+        "true_label": "Quá nhiệt"
+    },
+    {
+        "description": "Bơm thủy lực nóng bất thường, chạm vào bỏng tay",
+        "true_label": "Quá nhiệt"
+    },
+    {
+        "description": "Thiết bị quá nóng, nhiệt tỏa ra xung quanh nóng hầm hập",
+        "true_label": "Quá nhiệt"
+    },
+    {
+        "description": "Motor quá nóng, nóng bất thường so với mọi khi",
+        "true_label": "Quá nhiệt"
+    },
+    {
+        "description": "Hệ thống nóng ran, nhiệt lượng tỏa ra rất lớn",
+        "true_label": "Quá nhiệt"
+    },
+    {
+        "description": "Thiết bị nóng lên nhanh chóng, vượt quá nhiệt độ cho phép",
+        "true_label": "Quá nhiệt"
+    },
+    {
+        "description": "Máy bốc hơi nóng, nhiệt tăng liên tục không giảm",
+        "true_label": "Quá nhiệt"
+    },
+    {
+        "description": "Vỏ thiết bị nóng chảy nhựa, nhiệt độ cao bất thường",
+        "true_label": "Quá nhiệt"
+    },
+    {
+        "description": "Motor nóng liên tục, nhiệt độ không hạ dù đã giảm tải",
+        "true_label": "Quá nhiệt"
+    },
+    {
+        "description": "Thiết bị phát nhiệt mạnh hơn bình thường rất nhiều",
+        "true_label": "Quá nhiệt"
+    },
+    {
+        "description": "Máy nóng cực kỳ, cảm biến nhiệt báo vượt ngưỡng",
+        "true_label": "Quá nhiệt"
+    },
+    {
+        "description": "Rung lắc kèm tiếng cọ kim loại bên trong motor",
+        "true_label": "Hỏng bạc đạn / vòng bi"
+    },
+    {
+        "description": "Thiết bị rung mạnh kèm tiếng kêu rít từ vòng bi",
+        "true_label": "Hỏng bạc đạn / vòng bi"
+    },
+    {
+        "description": "Tiếng lách cách liên tục kèm rung động mạnh ở trục",
+        "true_label": "Hỏng bạc đạn / vòng bi"
+    },
+    {
+        "description": "Motor rung bất thường, nghe rõ tiếng kim loại chạm nhau",
+        "true_label": "Hỏng bạc đạn / vòng bi"
+    },
+    {
+        "description": "Rung lắc mạnh kèm tiếng va đập ở khu vực bạc đạn",
+        "true_label": "Hỏng bạc đạn / vòng bi"
+    },
+    {
+        "description": "Trục máy rung giật cục, tiếng kêu lạ phát ra liên tục",
+        "true_label": "Hỏng bạc đạn / vòng bi"
+    },
+    {
+        "description": "Phát hiện rung bất thường kèm tiếng rít cao từ ổ bi",
+        "true_label": "Hỏng bạc đạn / vòng bi"
+    },
+    {
+        "description": "Tiếng kim loại cọ sát mạnh, máy rung giật liên tục",
+        "true_label": "Hỏng bạc đạn / vòng bi"
+    },
+    {
+        "description": "Motor rung mạnh, tiếng cạch cạch liên hồi từ bên trong",
+        "true_label": "Hỏng bạc đạn / vòng bi"
+    },
+    {
+        "description": "Rung mạnh và tiếng kêu lạ phát ra từ vùng vòng bi",
+        "true_label": "Hỏng bạc đạn / vòng bi"
+    },
+    {
+        "description": "Bạc đạn phát ra tiếng kêu rít, rung lắc tăng dần",
+        "true_label": "Hỏng bạc đạn / vòng bi"
+    },
+    {
+        "description": "Thiết bị rung lắc dữ dội kèm âm thanh kim loại va chạm",
+        "true_label": "Hỏng bạc đạn / vòng bi"
+    },
+    {
+        "description": "Vòng bi motor kêu to, rung lắc rõ rệt khi vận hành",
+        "true_label": "Hỏng bạc đạn / vòng bi"
+    },
+    {
+        "description": "Nghe tiếng cọ sát kim loại và cảm nhận rung mạnh ở trục",
+        "true_label": "Hỏng bạc đạn / vòng bi"
+    },
+    {
+        "description": "Motor giật cục liên tục, tiếng lách cách từ bạc đạn",
+        "true_label": "Hỏng bạc đạn / vòng bi"
+    },
+    {
+        "description": "Bốc khói mùi nhựa cháy, nóng dữ dội bốc mùi khét",
+        "true_label": "Cháy cuộn dây / cháy motor"
+    },
+    {
+        "description": "Motor bốc khói đen, mùi cháy khét nồng nặc",
+        "true_label": "Cháy cuộn dây / cháy motor"
+    },
+    {
+        "description": "Mùi khét cháy rất nặng kèm khói bốc ra từ motor",
+        "true_label": "Cháy cuộn dây / cháy motor"
+    },
+    {
+        "description": "Cuộn dây bốc mùi cháy, nhiệt độ tăng cao kèm khói",
+        "true_label": "Cháy cuộn dây / cháy motor"
+    },
+    {
+        "description": "Motor cháy khét, bốc khói trắng từ bên trong",
+        "true_label": "Cháy cuộn dây / cháy motor"
+    },
+    {
+        "description": "Thiết bị bốc mùi nhựa cháy, nóng cực độ có khói",
+        "true_label": "Cháy cuộn dây / cháy motor"
+    },
+    {
+        "description": "Mùi cao su cháy khét lẹt từ motor kèm bốc khói nặng",
+        "true_label": "Cháy cuộn dây / cháy motor"
+    },
+    {
+        "description": "Khói bốc ra từ cuộn dây motor, mùi cháy nồng nặc",
+        "true_label": "Cháy cuộn dây / cháy motor"
+    },
+    {
+        "description": "Motor phát ra mùi khét dữ dội, bốc khói và nóng chảy",
+        "true_label": "Cháy cuộn dây / cháy motor"
+    },
+    {
+        "description": "Phát hiện khói và mùi cháy từ cuộn dây, tia lửa phát ra",
+        "true_label": "Cháy cuộn dây / cháy motor"
+    },
+    {
+        "description": "Mùi dầu cháy khét từ motor, bốc khói đen nóng rất cao",
+        "true_label": "Cháy cuộn dây / cháy motor"
+    },
+    {
+        "description": "Motor bốc khói mùi cháy nhựa, nóng không chạm vào được",
+        "true_label": "Cháy cuộn dây / cháy motor"
+    },
+    {
+        "description": "Cuộn dây motor cháy đen, mùi khét nặng bốc khói liên tục",
+        "true_label": "Cháy cuộn dây / cháy motor"
+    },
+    {
+        "description": "Thiết bị bốc khói kèm mùi khét cháy, cực kỳ nóng",
+        "true_label": "Cháy cuộn dây / cháy motor"
+    },
+    {
+        "description": "Mùi cháy khét nồng nặc, motor nóng chảy bốc khói",
+        "true_label": "Cháy cuộn dây / cháy motor"
+    },
+    {
+        "description": "Chập điện cháy cầu chì, sụt áp nghiêm trọng",
+        "true_label": "Sự cố điện"
+    },
+    {
+        "description": "Dòng điện dao động mạnh, tia lửa phóng ra từ tủ điện",
+        "true_label": "Sự cố điện"
+    },
+    {
+        "description": "Rò điện ra vỏ thiết bị, chạm vào bị giật",
+        "true_label": "Sự cố điện"
+    },
+    {
+        "description": "Mất pha đột ngột, motor chạy rung lắc bất thường",
+        "true_label": "Sự cố điện"
+    },
+    {
+        "description": "Chập mạch ở tủ điện điều khiển, cầu chì nổ",
+        "true_label": "Sự cố điện"
+    },
+    {
+        "description": "Tia lửa điện phóng ra từ đầu nối, rất nguy hiểm",
+        "true_label": "Sự cố điện"
+    },
+    {
+        "description": "Dòng điện tăng đột ngột vượt quá giới hạn cho phép",
+        "true_label": "Sự cố điện"
+    },
+    {
+        "description": "Sụt áp trầm trọng, thiết bị chạy yếu do điện không ổn",
+        "true_label": "Sự cố điện"
+    },
+    {
+        "description": "Lệch pha gây rung motor, dòng điện bất thường",
+        "true_label": "Sự cố điện"
+    },
+    {
+        "description": "Phát hiện rò điện nghiêm trọng ở vỏ máy, điện giật",
+        "true_label": "Sự cố điện"
+    },
+    {
+        "description": "Chập điện liên tục, relay bảo vệ nhảy ngắt liên tục",
+        "true_label": "Sự cố điện"
+    },
+    {
+        "description": "Dòng điện quá tải gây cháy cầu chì bảo vệ",
+        "true_label": "Sự cố điện"
+    },
+    {
+        "description": "Điện giật khi chạm vỏ thiết bị, rò điện ra ngoài",
+        "true_label": "Sự cố điện"
+    },
+    {
+        "description": "Contactor đánh lửa liên tục, dòng điện không ổn định",
+        "true_label": "Sự cố điện"
+    },
+    {
+        "description": "Phóng điện hồ quang từ dây dẫn, nguy cơ chập mạch",
+        "true_label": "Sự cố điện"
+    },
+    {
+        "description": "Motor nóng rung mạnh chạy yếu do quá tải liên tục",
+        "true_label": "Quá tải cơ khí"
+    },
+    {
+        "description": "Thiết bị quá tải, nóng kèm rung lắc mạnh giật cục",
+        "true_label": "Quá tải cơ khí"
+    },
+    {
+        "description": "Motor nóng bất thường kèm rung do chạy quá công suất",
+        "true_label": "Quá tải cơ khí"
+    },
+    {
+        "description": "Thiết bị nóng rung mạnh, dây đai căng quá mức do quá tải",
+        "true_label": "Quá tải cơ khí"
+    },
+    {
+        "description": "Quá tải liên tục gây nóng motor, rung mạnh giảm công suất",
+        "true_label": "Quá tải cơ khí"
+    },
+    {
+        "description": "Máy nóng chạy chậm hẳn do quá tải cơ khí nghiêm trọng",
+        "true_label": "Quá tải cơ khí"
+    },
+    {
+        "description": "Rung mạnh kèm nóng, thiết bị bị kẹt do quá tải",
+        "true_label": "Quá tải cơ khí"
+    },
+    {
+        "description": "Motor nóng ran rung lắc vì tải vượt quá thông số thiết kế",
+        "true_label": "Quá tải cơ khí"
+    },
+    {
+        "description": "Thiết bị quá tải gây nóng nghiêm trọng kèm rung giật",
+        "true_label": "Quá tải cơ khí"
+    },
+    {
+        "description": "Máy nén quá tải, nóng rung mạnh công suất sụt giảm",
+        "true_label": "Quá tải cơ khí"
+    },
+    {
+        "description": "Motor bị quá tải kéo dài, nóng dữ dội rung lắc mạnh",
+        "true_label": "Quá tải cơ khí"
+    },
+    {
+        "description": "Tải quá nặng khiến motor nóng rung và chạy chậm lại",
+        "true_label": "Quá tải cơ khí"
+    },
+    {
+        "description": "Quá tải làm thiết bị nóng bức rung liên tục giật cục",
+        "true_label": "Quá tải cơ khí"
+    },
+    {
+        "description": "Motor quá tải nghiêm trọng, nóng ran kèm rung động mạnh",
+        "true_label": "Quá tải cơ khí"
+    },
+    {
+        "description": "Thiết bị chạy quá tải liên tục gây nóng và rung lắc dữ dội",
+        "true_label": "Quá tải cơ khí"
+    },
+    {
+        "description": "Dầu chảy tràn ra nền, gioăng bị rách hỏng nặng",
+        "true_label": "Rò rỉ hệ thống"
+    },
+    {
+        "description": "Rò rỉ dầu thủy lực từ ống nối, dầu loang khắp nơi",
+        "true_label": "Rò rỉ hệ thống"
+    },
+    {
+        "description": "Phớt bơm bị hỏng gây rò rỉ nước liên tục",
+        "true_label": "Rò rỉ hệ thống"
+    },
+    {
+        "description": "Xì hơi từ van, áp suất giảm do rò rỉ khí",
+        "true_label": "Rò rỉ hệ thống"
+    },
+    {
+        "description": "Seal bị mòn gây rỉ dầu từ trục bơm",
+        "true_label": "Rò rỉ hệ thống"
+    },
+    {
+        "description": "Gioăng hỏng nặng, dầu tràn ra xung quanh thiết bị",
+        "true_label": "Rò rỉ hệ thống"
+    },
+    {
+        "description": "Rò rỉ nước làm mát từ đường ống, chảy nước liên tục",
+        "true_label": "Rò rỉ hệ thống"
+    },
+    {
+        "description": "Dầu rò rỉ từ hộp số, vết dầu loang trên sàn",
+        "true_label": "Rò rỉ hệ thống"
+    },
+    {
+        "description": "Bơm thủy lực bị rò dầu từ phớt trục, áp suất sụt",
+        "true_label": "Rò rỉ hệ thống"
+    },
+    {
+        "description": "Phát hiện rò rỉ dầu bôi trơn từ vị trí gioăng máy",
+        "true_label": "Rò rỉ hệ thống"
+    },
+    {
+        "description": "Rỉ dầu nhỏ giọt liên tục từ đáy thiết bị",
+        "true_label": "Rò rỉ hệ thống"
+    },
+    {
+        "description": "Nước chảy ra từ bơm, seal bị hỏng hoàn toàn",
+        "true_label": "Rò rỉ hệ thống"
+    },
+    {
+        "description": "Xì khí từ đường ống áp suất cao, rò rỉ nghiêm trọng",
+        "true_label": "Rò rỉ hệ thống"
+    },
+    {
+        "description": "Rò rỉ dầu nhớt từ gioăng nắp máy, dầu tràn ra ngoài",
+        "true_label": "Rò rỉ hệ thống"
+    },
+    {
+        "description": "Phớt trục chính bị hỏng gây rò dầu thủy lực nặng",
+        "true_label": "Rò rỉ hệ thống"
+    },
+    {
+        "description": "Trục bị cong vênh, bu lông lỏng nhiều chỗ",
+        "true_label": "Hư hỏng cơ khí"
+    },
+    {
+        "description": "Dây đai bị đứt rách, không truyền động được",
+        "true_label": "Hư hỏng cơ khí"
+    },
+    {
+        "description": "Bánh răng bị mòn nhiều, ăn khớp không đều",
+        "true_label": "Hư hỏng cơ khí"
+    },
+    {
+        "description": "Gỉ sét nặng bề mặt kim loại, han gỉ ăn mòn",
+        "true_label": "Hư hỏng cơ khí"
+    },
+    {
+        "description": "Thân máy bị nứt vỡ, biến dạng nghiêm trọng",
+        "true_label": "Hư hỏng cơ khí"
+    },
+    {
+        "description": "Bu lông cố định bị lỏng, thiết bị lung lay khi chạy",
+        "true_label": "Hư hỏng cơ khí"
+    },
+    {
+        "description": "Dây đai mòn gần đứt, cần thay thế ngay",
+        "true_label": "Hư hỏng cơ khí"
+    },
+    {
+        "description": "Trục truyền động bị cong, lệch tâm nghiêm trọng",
+        "true_label": "Hư hỏng cơ khí"
+    },
+    {
+        "description": "Chi tiết máy bị gãy nứt do mỏi vật liệu",
+        "true_label": "Hư hỏng cơ khí"
+    },
+    {
+        "description": "Khớp nối bị mòn xước, ăn mòn bề mặt nặng",
+        "true_label": "Hư hỏng cơ khí"
+    },
+    {
+        "description": "Bề mặt kim loại han gỉ nặng, ăn mòn sâu vào bên trong",
+        "true_label": "Hư hỏng cơ khí"
+    },
+    {
+        "description": "Vỏ thiết bị bị nứt vỡ do va đập cơ khí",
+        "true_label": "Hư hỏng cơ khí"
+    },
+    {
+        "description": "Trục máy bị cong lệch gây mất cân bằng khi quay",
+        "true_label": "Hư hỏng cơ khí"
+    },
+    {
+        "description": "Dây đai truyền động bị tuột ra khỏi puly",
+        "true_label": "Hư hỏng cơ khí"
+    },
+    {
+        "description": "Nhiều bu lông bị gãy, kết cấu thiết bị không còn chắc chắn",
+        "true_label": "Hư hỏng cơ khí"
+    },
+    {
+        "description": "Có tiếng ồn bất thường, kêu to liên tục từ motor",
+        "true_label": "Âm thanh bất thường"
+    },
+    {
+        "description": "Tiếng rít cao phát ra từ thiết bị khi vận hành",
+        "true_label": "Âm thanh bất thường"
+    },
+    {
+        "description": "Tiếng va đập lớn bên trong máy, ồn bất thường",
+        "true_label": "Âm thanh bất thường"
+    },
+    {
+        "description": "Nghe tiếng ù to liên tục từ motor chính",
+        "true_label": "Âm thanh bất thường"
+    },
+    {
+        "description": "Thiết bị phát ra tiếng kẹt nghiến khi hoạt động",
+        "true_label": "Âm thanh bất thường"
+    },
+    {
+        "description": "Tiếng gầm lớn bất thường từ bên trong máy",
+        "true_label": "Âm thanh bất thường"
+    },
+    {
+        "description": "Âm thanh lạ phát ra liên tục, ồn hơn bình thường nhiều",
+        "true_label": "Âm thanh bất thường"
+    },
+    {
+        "description": "Tiếng nổ nhỏ lách tách liên tục từ thiết bị",
+        "true_label": "Âm thanh bất thường"
+    },
+    {
+        "description": "Phát ra tiếng cọ sát lạ khi motor quay",
+        "true_label": "Âm thanh bất thường"
+    },
+    {
+        "description": "Tiếng ồn lớn bất thường khi thiết bị khởi động",
+        "true_label": "Âm thanh bất thường"
+    },
+    {
+        "description": "Tiếng kêu bất thường nghe rõ từ xa khi máy chạy",
+        "true_label": "Âm thanh bất thường"
+    },
+    {
+        "description": "Motor phát ra tiếng ồn lạ lúc to lúc nhỏ bất thường",
+        "true_label": "Âm thanh bất thường"
+    },
+    {
+        "description": "Tiếng kêu lạ phát ra từ bộ truyền động khi vận hành",
+        "true_label": "Âm thanh bất thường"
+    },
+    {
+        "description": "Âm thanh ồn ào bất thường vang lớn khi chạy tải cao",
+        "true_label": "Âm thanh bất thường"
+    },
+    {
+        "description": "Thiết bị kêu to hơn hẳn bình thường, tiếng ồn lạ rõ rệt",
+        "true_label": "Âm thanh bất thường"
+    },
+    {
+        "description": "Máy bị chập chờn, tắt bật liên tục không ổn định",
+        "true_label": "Giảm hiệu suất"
+    },
+    {
+        "description": "Thiết bị chạy chậm hẳn, công suất sụt giảm rõ rệt",
+        "true_label": "Giảm hiệu suất"
+    },
+    {
+        "description": "Motor không khởi động được, bấm nút không phản hồi",
+        "true_label": "Giảm hiệu suất"
+    },
+    {
+        "description": "Máy dừng đột ngột giữa chừng khi đang vận hành",
+        "true_label": "Giảm hiệu suất"
+    },
+    {
+        "description": "Thiết bị hoạt động yếu, không đạt công suất thiết kế",
+        "true_label": "Giảm hiệu suất"
+    },
+    {
+        "description": "Motor chạy chậm hơn bình thường, năng suất giảm nhiều",
+        "true_label": "Giảm hiệu suất"
+    },
+    {
+        "description": "Máy bị treo, kẹt cứng không hoạt động được nữa",
+        "true_label": "Giảm hiệu suất"
+    },
+    {
+        "description": "Thiết bị tắt đột ngột rồi không khởi động lại được",
+        "true_label": "Giảm hiệu suất"
+    },
+    {
+        "description": "Hiệu suất giảm rõ rệt, máy chạy yếu hẳn so với trước",
+        "true_label": "Giảm hiệu suất"
+    },
+    {
+        "description": "Motor chập chờn, lúc chạy lúc dừng không kiểm soát",
+        "true_label": "Giảm hiệu suất"
+    },
+    {
+        "description": "Thiết bị không đạt tốc độ yêu cầu, chạy chậm lề mề",
+        "true_label": "Giảm hiệu suất"
+    },
+    {
+        "description": "Máy bị kẹt không quay được, phải dừng hoạt động",
+        "true_label": "Giảm hiệu suất"
+    },
+    {
+        "description": "Công suất đầu ra giảm mạnh so với thông số thiết kế",
+        "true_label": "Giảm hiệu suất"
+    },
+    {
+        "description": "Motor khởi động rất chậm, mất nhiều thời gian để chạy ổn",
+        "true_label": "Giảm hiệu suất"
+    },
+    {
+        "description": "Thiết bị hoạt động không ổn định, hiệu suất thất thường",
+        "true_label": "Giảm hiệu suất"
+    }
+]

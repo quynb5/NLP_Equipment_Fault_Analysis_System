@@ -24,20 +24,47 @@ from transformers import AutoModel, AutoTokenizer
 # 1. PhoBERT MODEL LOADER
 # ============================================================
 
-print("🔄 Đang tải PhoBERT model (vinai/phobert-base)...")
+_HF_MODEL_NAME = "vinai/phobert-base"
 
 import pathlib as _pathlib
-_MODEL_PATH = str(_pathlib.Path(__file__).resolve().parent / "resources" / "phobert-base")
+_MODEL_PATH = str(_pathlib.Path(__file__).resolve().parent.parent / "resources" / "phobert-base")
 
-_tokenizer = AutoTokenizer.from_pretrained(_MODEL_PATH)
-_model = AutoModel.from_pretrained(_MODEL_PATH)
+
+def _load_model():
+    """Load PhoBERT từ local path, nếu không có thì download từ HuggingFace."""
+    model_dir = _pathlib.Path(_MODEL_PATH)
+
+    if model_dir.exists() and any(model_dir.iterdir()):
+        # Load từ local path
+        print(f"🔄 Đang tải PhoBERT từ local: {_MODEL_PATH}")
+        try:
+            tokenizer = AutoTokenizer.from_pretrained(_MODEL_PATH)
+            model = AutoModel.from_pretrained(_MODEL_PATH)
+            print("✅ Load từ local thành công")
+            return tokenizer, model
+        except Exception as e:
+            print(f"⚠️ Load từ local thất bại: {e}")
+            print("🔄 Sẽ download lại từ HuggingFace...")
+
+    # Download từ HuggingFace và lưu vào _MODEL_PATH
+    print(f"🔄 Đang download PhoBERT ({_HF_MODEL_NAME}) từ HuggingFace...")
+    model_dir.mkdir(parents=True, exist_ok=True)
+    tokenizer = AutoTokenizer.from_pretrained(_HF_MODEL_NAME)
+    model = AutoModel.from_pretrained(_HF_MODEL_NAME)
+    tokenizer.save_pretrained(_MODEL_PATH)
+    model.save_pretrained(_MODEL_PATH)
+    print(f"✅ Download và lưu thành công tại: {_MODEL_PATH}")
+    return tokenizer, model
+
+
+_tokenizer, _model = _load_model()
 _model.eval()  # Chế độ inference
 
 # Chọn device
 _device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 _model.to(_device)
 
-print(f"✅ PhoBERT loaded on {_device}")
+print(f"✅ PhoBERT ready on {_device}")
 
 
 # ============================================================
