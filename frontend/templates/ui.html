@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HỆ THỐNG PHÂN TÍCH CẢNH BÁO LỖI THIẾT BỊ — PhoBERT NLP</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+        url('/resources/images/bg.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: linear-gradient(180deg, #0047ba 0%, #002d75 100%);
+      min-height: 100vh;
+      padding: 20px 0;
+      position: fixed;
+      left: 0;
+      top: 0;
+      box-shadow: 4px 0 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .sidebar-header {
+      color: white;
+      text-align: center;
+      padding: 20px 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      margin-bottom: 20px;
+    }
+
+    .sidebar-header h2 {
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+    }
+
+    .sidebar-header .logo {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .sidebar-header .badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 0.7rem;
+      padding: 3px 10px;
+      border-radius: 12px;
+      margin-top: 8px;
+      letter-spacing: 1px;
+    }
+
+    .nav-menu {
+      list-style: none;
+    }
+
+    .nav-menu li {
+      margin: 5px 15px;
+    }
+
+    .nav-menu a {
+      display: flex;
+      align-items: center;
+      padding: 15px 20px;
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .nav-menu a:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .nav-menu a.active {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      font-weight: bold;
+    }
+
+    .nav-menu a .icon {
+      margin-right: 12px;
+      font-size: 1.3rem;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: 250px;
+      flex: 1;
+      padding: 30px;
+      padding-top: 60px;
+    }
+
+    .container {
+      max-width: 100%;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #ffffff;
+      font-size: 2.5rem;
+      margin-bottom: 40px;
+      margin-top: 10px;
+      letter-spacing: 4px;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 25px rgba(0, 71, 186, 0.8);
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .card-header {
+      background: linear-gradient(90deg, #0047ba 0%, #0066ff 100%);
+      color: white;
+      padding: 15px 20px;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .card-body {
+      padding: 25px;
+      min-height: 450px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #444;
+    }
+
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #0047ba;
+    }
+
+    textarea {
+      min-height: 180px;
+      resize: vertical;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
+
+    button {
+      background: linear-gradient(90deg, #0047ba 0%, #0066ff 100%);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-weight: bold;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 71, 186, 0.4);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-analyze {
+      width: 100%;
+      padding: 16px;
+      font-size: 1.2rem;
+    }
+
+    /* Loading spinner */
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 0.8s ease infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Result styles */
+    .result-placeholder {
+      text-align: center;
+      padding: 60px 20px;
+      color: #aaa;
+    }
+
+    .result-placeholder .icon {
+      font-size: 4rem;
+      margin-bottom: 15px;
+    }
+
+    .fault-type {
+      font-weight: bold;
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+    }
+
+    .fault-type.fault-high {
+      color: #c00000;
+    }
+
+    .fault-type.fault-medium {
+      color: #e68a00;
+    }
+
+    .fault-type.fault-low {
+      color: #2e7d32;
+    }
+
+    .level {
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin: 8px 0;
+      padding: 10px 20px;
+      border-radius: 8px;
+      display: inline-block;
+      background: #e0e0e0;
+    }
+
+    .nghiem-trong {
+      background: linear-gradient(90deg, #c00000 0%, #ff3333 100%);
+      color: white;
+    }
+
+    .canh-bao {
+      background: linear-gradient(90deg, #ff9800 0%, #ffb74d 100%);
+      color: white;
+    }
+
+    .thap {
+      background: linear-gradient(90deg, #4caf50 0%, #81c784 100%);
+      color: white;
+    }
+
+    /* Confidence meter */
+    .confidence-section {
+      margin: 16px 0;
+    }
+
+    .confidence-bar-bg {
+      height: 10px;
+      background: #e0e0e0;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .confidence-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #0047ba, #0066ff);
+      border-radius: 5px;
+      transition: width 0.6s ease;
+    }
+
+    .confidence-label {
+      font-size: 0.9rem;
+      color: #555;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Keyword tags */
+    .keywords-section {
+      margin: 16px 0;
+    }
+
+    .keyword-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .keyword-tag {
+      display: inline-block;
+      background: linear-gradient(90deg, #e3f2fd, #bbdefb);
+      color: #0d47a1;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: 1px solid #90caf9;
+    }
+
+    .keyword-tag.empty {
+      background: #f5f5f5;
+      color: #999;
+      border-color: #ddd;
+    }
+
+    /* Recommendations */
+    .khuyen-nghi {
+      margin-top: 20px;
+    }
+
+    .khuyen-nghi ul {
+      padding-left: 22px;
+      line-height: 1.8;
+    }
+
+    /* Summary box */
+    .tong-hop {
+      margin-top: 30px;
+      padding: 20px;
+      background: linear-gradient(90deg, #fff3cd 0%, #ffe69c 100%);
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .tong-hop strong {
+      color: #664d03;
+    }
+
+    /* Pipeline visualization */
+    .pipeline-section {
+      margin-top: 25px;
+    }
+
+    .pipeline-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .pipeline-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+    }
+
+    .pipeline-step-num {
+      width: 30px;
+      height: 30px;
+      min-width: 30px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0047ba, #0066ff);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 0.85rem;
+    }
+
+    .pipeline-step-content {
+      flex: 1;
+    }
+
+    .pipeline-step-name {
+      font-weight: 600;
+      color: #333;
+      font-size: 0.95rem;
+    }
+
+    .pipeline-step-output {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 3px;
+      word-break: break-word;
+    }
+
+    .pipeline-arrow {
+      text-align: center;
+      color: #0047ba;
+      font-size: 1rem;
+      padding: 0 0 0 8px;
+    }
+
+    /* Example hints */
+    .example-hints {
+      margin-top: 10px;
+      margin-bottom: 16px;
+    }
+
+    .example-hints span {
+      display: inline-block;
+      background: #f0f0f0;
+      color: #555;
+      padding: 4px 12px;
+      border-radius: 15px;
+      font-size: 0.82rem;
+      margin: 3px 4px 3px 0;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .example-hints span:hover {
+      background: #d0e4ff;
+      color: #0047ba;
+    }
+
+    /* History Page */
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .history-table th {
+      background: linear-gradient(90deg, #0047ba 0%, #0066ff 100%);
+      color: white;
+      padding: 15px;
+      text-align: left;
+      font-weight: bold;
+    }
+
+    .history-table td {
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .history-table tr:hover {
+      background: #f5f5f5;
+    }
+
+    .history-table .severity-high {
+      color: #c00000;
+      font-weight: bold;
+    }
+
+    .history-table .severity-medium {
+      color: #ff9800;
+      font-weight: bold;
+    }
+
+    .history-table .severity-low {
+      color: #4caf50;
+      font-weight: bold;
+    }
+
+    .empty-history {
+      text-align: center;
+      padding: 60px;
+      color: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+
+    .empty-history .icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+
+    .btn-clear {
+      background: linear-gradient(90deg, #c00000 0%, #ff3333 100%);
+      margin-top: 20px;
+    }
+
+    .btn-view {
+      background: linear-gradient(90deg, #0047ba 0%, #002d75 100%);
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      min-width: auto;
+      margin-right: 8px;
+    }
+
+    .btn-view:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 71, 186, 0.4);
+    }
+
+    .btn-delete {
+      background: linear-gradient(90deg, #c00000 0%, #ff3333 100%);
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      min-width: auto;
+    }
+
+    .btn-delete:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(192, 0, 0, 0.4);
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 16px;
+      max-width: 700px;
+      width: 90%;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: modalSlide 0.3s ease;
+    }
+
+    @keyframes modalSlide {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-header {
+      background: linear-gradient(90deg, #0047ba 0%, #0066ff 100%);
+      color: white;
+      padding: 20px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 16px 16px 0 0;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+
+    .modal-close {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .modal-close:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .modal-body {
+      padding: 25px;
+    }
+
+    .detail-section {
+      margin-bottom: 20px;
+    }
+
+    .detail-section h3 {
+      color: #0047ba;
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #e0e0e0;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .detail-item {
+      background: #f5f7fa;
+      padding: 12px 15px;
+      border-radius: 8px;
+    }
+
+    .detail-item label {
+      display: block;
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 4px;
+    }
+
+    .detail-item span {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .detail-summary {
+      background: linear-gradient(90deg, #fff3cd 0%, #ffe69c 100%);
+      padding: 15px 20px;
+      border-radius: 10px;
+      margin-top: 15px;
+    }
+
+    .detail-summary strong {
+      color: #664d03;
+    }
+
+    .severity-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .severity-badge.high {
+      background: linear-gradient(90deg, #c00000 0%, #ff3333 100%);
+      color: white;
+    }
+
+    .severity-badge.medium {
+      background: linear-gradient(90deg, #ff9800 0%, #ffb74d 100%);
+      color: white;
+    }
+
+    .severity-badge.low {
+      background: linear-gradient(90deg, #4caf50 0%, #81c784 100%);
+      color: white;
+    }
+
+    .recommendations-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .recommendations-list li {
+      padding: 8px 0;
+      padding-left: 25px;
+      position: relative;
+      border-bottom: 1px solid #eee;
+    }
+
+    .recommendations-list li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #0047ba;
+      font-weight: bold;
+    }
+
+    .recommendations-list li:last-child {
+      border-bottom: none;
+    }
+
+    @media (max-width: 1000px) {
+      .sidebar {
+        width: 80px;
+      }
+
+      .sidebar-header h2,
+      .sidebar-header .badge,
+      .nav-menu a span {
+        display: none;
+      }
+
+      .nav-menu a {
+        justify-content: center;
+        padding: 15px;
+      }
+
+      .nav-menu a .icon {
+        margin-right: 0;
+        font-size: 1.5rem;
+      }
+
+      .main-content {
+        margin-left: 80px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">⚙️</div>
+      <h2>Quản Lý Thiết Bị</h2>
+      <div class="badge">PhoBERT NLP</div>
+    </div>
+    <ul class="nav-menu">
+      <li>
+        <a href="#" class="active" onclick="showPage('analysis', this)">
+          <span class="icon">📊</span>
+          <span>Phân Tích</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" onclick="showPage('history', this)">
+          <span class="icon">📜</span>
+          <span>Lịch Sử</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Page: Phân Tích -->
+    <div id="page-analysis" class="page active">
+      <div class="container">
+        <h1>HỆ THỐNG PHÂN TÍCH CẢNH BÁO LỖI THIẾT BỊ</h1>
+
+        <div class="grid">
+          <!-- Cột trái: Nhập mô tả -->
+          <div class="card">
+            <div class="card-header">📝 Mô Tả Tình Trạng Thiết Bị</div>
+            <div class="card-body">
+              <label>Loại thiết bị:</label>
+              <select id="loai-thiet-bi">
+                <option value="Motor">Motor</option>
+                <option value="Bơm">Bơm</option>
+                <option value="Quạt">Quạt</option>
+                <option value="Máy nén">Máy nén</option>
+                <option value="Máy phát điện">Máy phát điện</option>
+                <option value="Băng tải">Băng tải</option>
+              </select>
+
+              <label>Mô tả tình trạng (tiếng Việt tự nhiên):</label>
+              <textarea id="mo-ta"
+                placeholder="Ví dụ: Motor khu A nóng bất thường, rung mạnh, nghe tiếng kim loại va chạm..."></textarea>
+
+              <div class="example-hints">
+                <strong style="font-size:0.85rem; color:#666;">💡 Gợi ý:</strong><br>
+                <span onclick="fillExample(this)">Motor nóng bất thường, rung mạnh</span>
+                <span onclick="fillExample(this)">Mùi khét, bốc khói, dòng điện tăng đột ngột</span>
+                <span onclick="fillExample(this)">Rò rỉ dầu, gioăng mòn nhiều</span>
+                <span onclick="fillExample(this)">Máy chạy bình thường, không có tiếng ồn lạ</span>
+              </div>
+
+              <button class="btn-analyze" id="btn-analyze" onclick="phanTich()">
+                🔍 Phân Tích Bằng PhoBERT
+              </button>
+            </div>
+          </div>
+
+          <!-- Cột phải: Kết quả -->
+          <div class="card">
+            <div class="card-header">📋 Kết Quả Phân Tích NLP</div>
+            <div class="card-body" id="ketqua">
+              <div class="result-placeholder">
+                <div class="icon">🤖</div>
+                <h3>PhoBERT NLP Engine</h3>
+                <p style="margin-top:10px; color:#999;">Nhập mô tả tình trạng thiết bị và nhấn "Phân Tích" để bắt đầu
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pipeline NLP -->
+        <div class="tong-hop" id="pipeline-box" style="display:none;">
+          <strong>🔬 Pipeline NLP (PhoBERT):</strong>
+          <div id="pipeline-content" class="pipeline-steps" style="margin-top:12px;"></div>
+        </div>
+
+        <!-- Tổng hợp -->
+        <div class="tong-hop" id="tong-hop" style="display:none;">
+          <strong>📌 Tình Trạng Tổng Hợp:</strong><br>
+          <span id="mo-ta-tong-hop"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page: Lịch Sử -->
+    <div id="page-history" class="page">
+      <div class="container">
+        <h1>📜 LỊCH SỬ PHÂN TÍCH</h1>
+
+        <div id="history-content">
+          <div class="empty-history">
+            <div class="icon">📭</div>
+            <h3>Chưa có lịch sử phân tích</h3>
+            <p>Thực hiện phân tích thiết bị để xem lịch sử tại đây</p>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+          <button class="btn-clear" onclick="clearHistory()">🗑️ Xóa Lịch Sử</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Chi Tiết -->
+  <div class="modal-overlay" id="detailModal" onclick="closeModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h2>📋 Chi Tiết Phân Tích #<span id="modal-id"></span></h2>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Thời gian -->
+        <div class="detail-section">
+          <h3>⏰ Thời Gian</h3>
+          <div class="detail-item" style="background: #e3f2fd;">
+            <label>Ngày giờ phân tích</label>
+            <span id="modal-time"></span>
+          </div>
+        </div>
+
+        <!-- Dữ liệu đầu vào -->
+        <div class="detail-section">
+          <h3>📝 Dữ Liệu Đầu Vào</h3>
+          <div class="detail-item">
+            <label>Thiết bị</label>
+            <span id="modal-equipment"></span>
+          </div>
+          <div class="detail-item" style="margin-top: 12px;">
+            <label>Mô tả</label>
+            <span id="modal-description" style="white-space: pre-wrap;"></span>
+          </div>
+        </div>
+
+        <!-- Kết quả -->
+        <div class="detail-section">
+          <h3>📊 Kết Quả Phân Tích</h3>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <label>Loại lỗi</label>
+              <span id="modal-fault" style="color: #c00000;"></span>
+            </div>
+            <div class="detail-item">
+              <label>Mức độ</label>
+              <span id="modal-severity"></span>
+            </div>
+            <div class="detail-item">
+              <label>Confidence</label>
+              <span id="modal-confidence"></span>
+            </div>
+            <div class="detail-item">
+              <label>Severity Score</label>
+              <span id="modal-score"></span>
+            </div>
+          </div>
+          <div class="detail-item" style="margin-top: 12px;">
+            <label>Từ khóa phát hiện</label>
+            <div id="modal-keywords" class="keyword-tags"></div>
+          </div>
+        </div>
+
+        <!-- Khuyến nghị -->
+        <div class="detail-section">
+          <h3>💡 Khuyến Nghị Xử Lý</h3>
+          <ul class="recommendations-list" id="modal-recommendations"></ul>
+        </div>
+
+        <!-- Tổng hợp -->
+        <div class="detail-summary">
+          <strong>📌 Tình Trạng Tổng Hợp:</strong><br>
+          <span id="modal-summary"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Navigation
+    function showPage(pageId, element) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + pageId).classList.add('active');
+
+      document.querySelectorAll('.nav-menu a').forEach(a => a.classList.remove('active'));
+      element.classList.add('active');
+
+      if (pageId === 'history') {
+        loadHistory();
+      }
+    }
+
+    // Fill example text
+    function fillExample(el) {
+      document.getElementById('mo-ta').value = el.textContent;
+    }
+
+    // ========== ANALYZE ==========
+    async function phanTich() {
+      const description = document.getElementById("mo-ta").value.trim();
+      if (!description) {
+        alert("Vui lòng nhập mô tả tình trạng thiết bị!");
+        return;
+      }
+
+      const btn = document.getElementById("btn-analyze");
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Đang phân tích...';
+
+      const data = {
+        equipment: document.getElementById("loai-thiet-bi").value,
+        description: description
+      };
+
+      try {
+        const res = await fetch("/analyze", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+        displayResult(result);
+
+      } catch (err) {
+        alert("Không thể kết nối tới server phân tích!");
+        console.error(err);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '🔍 Phân Tích Bằng PhoBERT';
+      }
+    }
+
+    // Display analysis result
+    function displayResult(result) {
+      const container = document.getElementById("ketqua");
+
+      // Severity class
+      let sevClass = "thap";
+      if (result.severity === "NGHIÊM TRỌNG") sevClass = "nghiem-trong";
+      else if (result.severity === "CẢNH BÁO") sevClass = "canh-bao";
+
+      // Keyword tags HTML
+      let kwHTML = '';
+      if (result.keywords && result.keywords.length > 0) {
+        kwHTML = result.keywords.map(k => `<span class="keyword-tag">${k}</span>`).join('');
+      } else {
+        kwHTML = '<span class="keyword-tag empty">Không phát hiện từ khóa</span>';
+      }
+
+      // Recommendations HTML
+      let recHTML = result.recommendations.map(r => `<li>${r}</li>`).join('');
+
+      // Confidence percentage
+      const confPct = Math.round((result.confidence || 0) * 100);
+      const scorePct = Math.round((result.severity_score || 0) * 100);
+
+      container.innerHTML = `
+        <div class="fault-type ${sevClass === 'nghiem-trong' ? 'fault-high' : sevClass === 'canh-bao' ? 'fault-medium' : 'fault-low'}">${sevClass === 'nghiem-trong' ? '🔴' : sevClass === 'canh-bao' ? '🟡' : '🟢'} ${result.fault_type}</div>
+
+        <div>Mức Độ Cảnh Báo:</div>
+        <div class="level ${sevClass}">${result.severity}</div>
+
+        <div class="confidence-section">
+          <div class="confidence-label">
+            <span>Confidence (PhoBERT)</span>
+            <span><strong>${confPct}%</strong></span>
+          </div>
+          <div class="confidence-bar-bg">
+            <div class="confidence-bar" style="width: ${confPct}%"></div>
+          </div>
+        </div>
+
+        <div class="confidence-section">
+          <div class="confidence-label">
+            <span>Severity Score</span>
+            <span><strong>${scorePct}%</strong></span>
+          </div>
+          <div class="confidence-bar-bg">
+            <div class="confidence-bar" style="width: ${scorePct}%; background: linear-gradient(90deg,
+              ${sevClass === 'nghiem-trong' ? '#c00000, #ff3333' :
+          sevClass === 'canh-bao' ? '#ff9800, #ffb74d' :
+            '#4caf50, #81c784'})"></div>
+          </div>
+        </div>
+
+        <div class="keywords-section">
+          <strong>🏷️ Từ Khóa Phát Hiện:</strong>
+          <div class="keyword-tags">${kwHTML}</div>
+        </div>
+
+        <div class="khuyen-nghi">
+          <strong>💡 Khuyến Nghị Xử Lý:</strong>
+          <ul>${recHTML}</ul>
+        </div>
+      `;
+
+      // Summary
+      document.getElementById("mo-ta-tong-hop").textContent = result.summary;
+      document.getElementById("tong-hop").style.display = "block";
+
+      // Pipeline steps
+      if (result.pipeline_steps && result.pipeline_steps.length > 0) {
+        displayPipeline(result.pipeline_steps);
+      }
+    }
+
+    // Display NLP pipeline
+    function displayPipeline(steps) {
+      const box = document.getElementById("pipeline-box");
+      const content = document.getElementById("pipeline-content");
+
+      let html = '';
+      steps.forEach((step, idx) => {
+        let outputStr = '';
+        if (typeof step.output === 'string') {
+          outputStr = step.output;
+        } else if (Array.isArray(step.output)) {
+          if (step.output.length > 0 && typeof step.output[0] === 'object') {
+            outputStr = step.output.map(o => {
+              if (o.fault) return `${o.fault}: ${(o.similarity * 100).toFixed(1)}%`;
+              if (o.keyword) return `${o.keyword} (${o.category})`;
+              return JSON.stringify(o);
+            }).join(' | ');
+          } else {
+            outputStr = `[${step.output.length} items]`;
+          }
+        } else if (typeof step.output === 'object') {
+          outputStr = Object.entries(step.output).map(([k, v]) => `${k}: ${v}`).join(', ');
+        }
+
+        if (idx > 0) {
+          html += `<div class="pipeline-arrow">↓</div>`;
+        }
+        html += `
+          <div class="pipeline-step">
+            <div class="pipeline-step-num">${step.step}</div>
+            <div class="pipeline-step-content">
+              <div class="pipeline-step-name">${step.name}</div>
+              <div class="pipeline-step-output">${outputStr}</div>
+            </div>
+          </div>
+        `;
+      });
+
+      content.innerHTML = html;
+      box.style.display = "block";
+    }
+
+    // ========== HISTORY ==========
+    async function loadHistory() {
+      const container = document.getElementById('history-content');
+
+      try {
+        const res = await fetch('/history');
+        const data = await res.json();
+        const history = data.data;
+
+        if (history.length === 0) {
+          container.innerHTML = `
+            <div class="empty-history">
+              <div class="icon">📭</div>
+              <h3>Chưa có lịch sử phân tích</h3>
+              <p>Thực hiện phân tích thiết bị để xem lịch sử tại đây</p>
+            </div>
+          `;
+          return;
+        }
+
+        let tableHTML = `
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Thời gian</th>
+                <th>Thiết bị</th>
+                <th>Loại lỗi</th>
+                <th>Mức độ</th>
+                <th>Từ khóa</th>
+                <th>Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+
+        history.forEach(item => {
+          let severityClass = 'severity-low';
+          if (item.severity === 'NGHIÊM TRỌNG') severityClass = 'severity-high';
+          else if (item.severity === 'CẢNH BÁO') severityClass = 'severity-medium';
+
+          const keywords = (item.keywords || []).join(', ') || '—';
+
+          tableHTML += `
+            <tr>
+              <td>${item.id}</td>
+              <td>${item.created_at}</td>
+              <td>${item.equipment}</td>
+              <td>${item.fault_type}</td>
+              <td class="${severityClass}">${item.severity}</td>
+              <td>${keywords.substring(0, 50)}${keywords.length > 50 ? '...' : ''}</td>
+              <td>
+                <button class="btn-view" onclick="viewDetails(${item.id})">👁️</button>
+                <button class="btn-delete" onclick="deleteRecord(${item.id})">🗑️</button>
+              </td>
+            </tr>
+          `;
+        });
+
+        tableHTML += '</tbody></table>';
+        tableHTML += `<p style="color: white; margin-top: 15px; text-align: center;">Tổng số: ${data.total} bản ghi</p>`;
+        container.innerHTML = tableHTML;
+
+      } catch (err) {
+        container.innerHTML = `
+          <div class="empty-history">
+            <div class="icon">⚠️</div>
+            <h3>Không thể tải lịch sử</h3>
+            <p>Lỗi kết nối server</p>
+          </div>
+        `;
+        console.error(err);
+      }
+    }
+
+    // View detail modal
+    async function viewDetails(id) {
+      try {
+        const response = await fetch(`/history/${id}`);
+        const data = await response.json();
+
+        document.getElementById('modal-id').textContent = data.id;
+        document.getElementById('modal-time').textContent = data.created_at;
+        document.getElementById('modal-equipment').textContent = data.equipment;
+        document.getElementById('modal-description').textContent = data.description;
+        document.getElementById('modal-fault').textContent = data.fault_type;
+        document.getElementById('modal-confidence').textContent =
+          Math.round((data.confidence || 0) * 100) + '%';
+        document.getElementById('modal-score').textContent =
+          Math.round((data.severity_score || 0) * 100) + '%';
+
+        // Keywords tags
+        const kwContainer = document.getElementById('modal-keywords');
+        const keywords = data.keywords || [];
+        if (keywords.length > 0) {
+          kwContainer.innerHTML = keywords.map(k =>
+            `<span class="keyword-tag">${k}</span>`
+          ).join('');
+        } else {
+          kwContainer.innerHTML = '<span class="keyword-tag empty">Không có</span>';
+        }
+
+        // Severity badge
+        let severityClass = 'low';
+        if (data.severity === 'NGHIÊM TRỌNG') severityClass = 'high';
+        else if (data.severity === 'CẢNH BÁO') severityClass = 'medium';
+        document.getElementById('modal-severity').innerHTML =
+          `<span class="severity-badge ${severityClass}">${data.severity}</span>`;
+
+        // Recommendations
+        const recList = document.getElementById('modal-recommendations');
+        recList.innerHTML = '';
+        (data.recommendations || []).forEach(rec => {
+          const li = document.createElement('li');
+          li.textContent = rec;
+          recList.appendChild(li);
+        });
+
+        // Summary
+        document.getElementById('modal-summary').textContent = data.summary;
+
+        // Show modal
+        document.getElementById('detailModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+      } catch (err) {
+        alert('Không thể tải chi tiết bản ghi!');
+        console.error(err);
+      }
+    }
+
+    // Close modal
+    function closeModal(event) {
+      if (event && event.target !== event.currentTarget) return;
+      document.getElementById('detailModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // Delete record
+    async function deleteRecord(id) {
+      if (confirm('Bạn có chắc muốn xóa bản ghi này?')) {
+        try {
+          await fetch(`/history/${id}`, { method: 'DELETE' });
+          loadHistory();
+        } catch (err) {
+          alert('Không thể xóa bản ghi!');
+          console.error(err);
+        }
+      }
+    }
+
+    // Clear all history
+    async function clearHistory() {
+      if (confirm('Bạn có chắc muốn xóa toàn bộ lịch sử?')) {
+        try {
+          await fetch('/history', { method: 'DELETE' });
+          loadHistory();
+        } catch (err) {
+          alert('Không thể xóa lịch sử!');
+          console.error(err);
+        }
+      }
+    }
+  </script>
+
+</body>
+
+</html>
