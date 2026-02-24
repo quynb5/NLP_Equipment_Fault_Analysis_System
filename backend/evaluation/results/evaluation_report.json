@@ -1,13 +1,13 @@
 {
-  "accuracy": 0.84,
-  "precision_macro": 0.8988,
-  "recall_macro": 0.84,
-  "f1_macro": 0.8418,
+  "accuracy": 0.94,
+  "precision_macro": 0.9453,
+  "recall_macro": 0.94,
+  "f1_macro": 0.94,
   "per_class": {
     "Hoạt động ổn định": {
-      "precision": 0.5172,
-      "recall": 1.0,
-      "f1-score": 0.6818,
+      "precision": 0.9286,
+      "recall": 0.8667,
+      "f1-score": 0.8966,
       "support": 15.0
     },
     "Quá nhiệt": {
@@ -17,9 +17,9 @@
       "support": 15.0
     },
     "Hỏng bạc đạn / vòng bi": {
-      "precision": 0.7143,
+      "precision": 0.8824,
       "recall": 1.0,
-      "f1-score": 0.8333,
+      "f1-score": 0.9375,
       "support": 15.0
     },
     "Cháy cuộn dây / cháy motor": {
@@ -30,8 +30,8 @@
     },
     "Sự cố điện": {
       "precision": 1.0,
-      "recall": 0.9333,
-      "f1-score": 0.9655,
+      "recall": 1.0,
+      "f1-score": 1.0,
       "support": 15.0
     },
     "Quá tải cơ khí": {
@@ -42,33 +42,33 @@
     },
     "Rò rỉ hệ thống": {
       "precision": 1.0,
-      "recall": 0.6667,
-      "f1-score": 0.8,
+      "recall": 0.9333,
+      "f1-score": 0.9655,
       "support": 15.0
     },
     "Hư hỏng cơ khí": {
-      "precision": 1.0,
-      "recall": 0.7333,
-      "f1-score": 0.8462,
+      "precision": 0.9333,
+      "recall": 0.9333,
+      "f1-score": 0.9333,
       "support": 15.0
     },
     "Âm thanh bất thường": {
       "precision": 1.0,
-      "recall": 0.4667,
-      "f1-score": 0.6364,
+      "recall": 0.9333,
+      "f1-score": 0.9655,
       "support": 15.0
     },
     "Giảm hiệu suất": {
-      "precision": 0.9231,
-      "recall": 0.8,
-      "f1-score": 0.8571,
+      "precision": 0.875,
+      "recall": 0.9333,
+      "f1-score": 0.9032,
       "support": 15.0
     }
   },
   "latency": {
-    "mean_ms": 21.24,
-    "min_ms": 19.15,
-    "max_ms": 29.45,
-    "p95_ms": 22.78
+    "mean_ms": 23.65,
+    "min_ms": 21.6,
+    "max_ms": 31.49,
+    "p95_ms": 24.9
   }
 }

@@ -6,29 +6,29 @@ Classification Report:
 
                             precision    recall  f1-score   support
 
-         Hoạt động ổn định       0.52      1.00      0.68        15
+         Hoạt động ổn định       0.93      0.87      0.90        15
                  Quá nhiệt       1.00      0.80      0.89        15
-    Hỏng bạc đạn / vòng bi       0.71      1.00      0.83        15
+    Hỏng bạc đạn / vòng bi       0.88      1.00      0.94        15
 Cháy cuộn dây / cháy motor       1.00      1.00      1.00        15
-                Sự cố điện       1.00      0.93      0.97        15
+                Sự cố điện       1.00      1.00      1.00        15
             Quá tải cơ khí       0.83      1.00      0.91        15
-            Rò rỉ hệ thống       1.00      0.67      0.80        15
-            Hư hỏng cơ khí       1.00      0.73      0.85        15
-       Âm thanh bất thường       1.00      0.47      0.64        15
-            Giảm hiệu suất       0.92      0.80      0.86        15
+            Rò rỉ hệ thống       1.00      0.93      0.97        15
+            Hư hỏng cơ khí       0.93      0.93      0.93        15
+       Âm thanh bất thường       1.00      0.93      0.97        15
+            Giảm hiệu suất       0.88      0.93      0.90        15
 
-                  accuracy                           0.84       150
-                 macro avg       0.90      0.84      0.84       150
-              weighted avg       0.90      0.84      0.84       150
+                  accuracy                           0.94       150
+                 macro avg       0.95      0.94      0.94       150
+              weighted avg       0.95      0.94      0.94       150
 
 
 ======================================================================
   LATENCY STATS (CPU)
 ======================================================================
 
-  Mean:  21.24 ms
-  Min:   19.15 ms
-  Max:   29.45 ms
-  P95:   22.78 ms
+  Mean:  23.65 ms
+  Min:   21.60 ms
+  Max:   31.49 ms
+  P95:   24.90 ms
   Total: 150 samples
 

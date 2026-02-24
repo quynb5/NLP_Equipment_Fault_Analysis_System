@@ -102,6 +102,16 @@ FAULT_REFERENCES = {
             "nhiệt độ tăng cao bất thường bỏng tay nóng ran",
             "thiết bị bốc hơi nóng khói nhiệt tăng",
             "vỏ máy nóng chảy quá nhiệt nghiêm trọng",
+            "máy nóng ran sờ vào bỏng da nhiệt cao",
+            "nhiệt tỏa ra rất mạnh thiết bị quá nóng",
+            "vỏ motor nóng dữ dội nhiệt độ vượt ngưỡng",
+            "bơm thủy lực nóng bất thường chạm bỏng tay",
+            "nóng hầm hập nhiệt lượng tỏa lớn bất thường",
+            "nhiệt tăng liên tục không giảm nóng bốc hơi",
+            "cảm biến nhiệt báo vượt ngưỡng thiết bị quá nóng",
+            "nhiệt độ cao bất thường nóng hơn bình thường rất nhiều",
+            "thiết bị phát nhiệt mạnh quá mức cho phép",
+            "motor nóng liên tục không hạ nhiệt dù giảm tải",
         ],
         "severity_base": 0.7,
         "description": "Thiết bị hoạt động ở nhiệt độ cao bất thường",
@@ -113,6 +123,16 @@ FAULT_REFERENCES = {
             "rung bất thường tiếng rít cao tiếng kim loại",
             "rung động mạnh kèm tiếng va đập bạc đạn vòng bi",
             "tiếng lách cách rung liên tục giật cục",
+            "rung lắc kèm tiếng cọ kim loại bên trong motor",
+            "tiếng kêu rít từ vòng bi rung lắc mạnh",
+            "trục máy rung giật cục tiếng kêu lạ liên tục",
+            "tiếng kim loại cọ sát mạnh rung giật liên tục",
+            "bạc đạn phát tiếng kêu rít rung lắc tăng dần",
+            "ổ bi kêu to rung lắc rõ rệt khi vận hành",
+            "tiếng cọ sát kim loại cảm nhận rung mạnh ở trục",
+            "motor giật cục liên tục tiếng lách cách bạc đạn",
+            "rung dữ dội kèm âm thanh kim loại va chạm ổ bi",
+            "phát hiện rung bất thường tiếng rít cao từ vòng bi",
         ],
         "severity_base": 0.75,
         "description": "Rung động + tiếng kim loại — nghi ngờ hỏng bạc đạn hoặc vòng bi",
@@ -124,6 +144,16 @@ FAULT_REFERENCES = {
             "khét mùi dầu cháy quá nhiệt nghiêm trọng khói",
             "motor cháy mùi khét nóng chảy tia lửa điện",
             "cuộn dây cháy mùi cao su cháy bốc khói nhiệt cao",
+            "bốc khói đen mùi cháy khét nồng nặc từ motor",
+            "mùi khét cháy rất nặng kèm khói bốc mạnh",
+            "khói bốc ra từ cuộn dây motor mùi cháy nồng",
+            "motor phát mùi khét dữ dội bốc khói nóng chảy",
+            "phát hiện khói mùi cháy tia lửa từ cuộn dây",
+            "mùi dầu cháy khét từ motor bốc khói đen nóng cao",
+            "motor bốc khói mùi cháy nhựa nóng không chạm được",
+            "cuộn dây motor cháy đen mùi khét bốc khói liên tục",
+            "thiết bị bốc khói mùi khét cháy cực kỳ nóng",
+            "mùi cháy khét nồng nặc motor nóng chảy bốc khói",
         ],
         "severity_base": 0.9,
         "description": "Quá nhiệt kết hợp mùi cháy — cháy cuộn dây hoặc cháy motor",
@@ -135,6 +165,16 @@ FAULT_REFERENCES = {
             "dòng điện dao động bất thường quá tải cháy cầu chì",
             "mất pha lệch pha sụt áp dòng điện bất thường",
             "điện giật rò điện nguy hiểm chập mạch",
+            "chập điện cháy cầu chì sụt áp nghiêm trọng",
+            "rò điện ra vỏ thiết bị chạm vào bị giật",
+            "chập mạch tủ điện điều khiển cầu chì nổ",
+            "tia lửa điện phóng ra từ đầu nối nguy hiểm",
+            "dòng điện tăng đột ngột vượt giới hạn cho phép",
+            "sụt áp trầm trọng thiết bị chạy yếu điện không ổn",
+            "lệch pha gây rung motor dòng điện bất thường",
+            "rò điện nghiêm trọng vỏ máy điện giật",
+            "relay bảo vệ nhảy ngắt liên tục chập điện",
+            "dòng điện quá tải gây cháy cầu chì bảo vệ",
         ],
         "severity_base": 0.85,
         "description": "Vấn đề hệ thống điện — chập, rò, quá tải",
@@ -146,6 +186,16 @@ FAULT_REFERENCES = {
             "quá nóng rung lắc mạnh dây đai căng quá tải",
             "motor nóng rung mạnh chạy chậm công suất giảm",
             "thiết bị quá tải nóng rung giật kẹt",
+            "motor nóng rung mạnh chạy yếu quá tải liên tục",
+            "thiết bị quá tải nóng kèm rung lắc mạnh giật cục",
+            "nóng bất thường kèm rung do chạy quá công suất",
+            "nóng rung mạnh dây đai căng quá mức do quá tải",
+            "quá tải liên tục gây nóng motor rung mạnh giảm công suất",
+            "máy nóng chạy chậm hẳn do quá tải cơ khí nghiêm trọng",
+            "rung mạnh kèm nóng thiết bị bị kẹt do quá tải",
+            "motor nóng ran rung lắc tải vượt thông số thiết kế",
+            "máy nén quá tải nóng rung mạnh công suất sụt giảm",
+            "tải quá nặng khiến motor nóng rung chạy chậm lại",
         ],
         "severity_base": 0.8,
         "description": "Quá nhiệt + rung động — thiết bị bị quá tải",
@@ -157,6 +207,16 @@ FAULT_REFERENCES = {
             "gioăng hỏng rò rỉ rỉ dầu tràn dầu",
             "phớt hỏng rò rỉ dầu áp suất giảm",
             "seal hỏng rò rỉ nước chảy tràn",
+            "dầu chảy tràn ra nền gioăng bị rách hỏng nặng",
+            "rò rỉ dầu thủy lực từ ống nối dầu loang khắp nơi",
+            "phớt bơm hỏng gây rò rỉ nước liên tục",
+            "xì hơi từ van áp suất giảm do rò rỉ khí",
+            "seal bị mòn gây rỉ dầu từ trục bơm",
+            "rò rỉ nước làm mát từ đường ống chảy nước liên tục",
+            "dầu rò rỉ từ hộp số vết dầu loang trên sàn",
+            "bơm thủy lực rò dầu từ phớt trục áp suất sụt",
+            "rỉ dầu nhỏ giọt liên tục từ đáy thiết bị",
+            "xì khí từ đường ống áp suất cao rò rỉ nghiêm trọng",
         ],
         "severity_base": 0.5,
         "description": "Rò rỉ dầu, nước, hoặc khí trong hệ thống",
@@ -168,6 +228,16 @@ FAULT_REFERENCES = {
             "đứt dây đai dây đai mòn tuột",
             "lỏng bu lông lung lay trục lệch trục cong",
             "bạc đạn hỏng vòng bi hỏng mòn nhiều",
+            "trục bị cong vênh bu lông lỏng nhiều chỗ",
+            "dây đai bị đứt rách không truyền động được",
+            "bánh răng bị mòn nhiều ăn khớp không đều",
+            "gỉ sét nặng bề mặt kim loại han gỉ ăn mòn",
+            "thân máy bị nứt vỡ biến dạng nghiêm trọng",
+            "bu lông cố định bị lỏng thiết bị lung lay",
+            "trục truyền động bị cong lệch tâm nghiêm trọng",
+            "chi tiết máy bị gãy nứt do mỏi vật liệu",
+            "khớp nối bị mòn xước ăn mòn bề mặt nặng",
+            "vỏ thiết bị bị nứt vỡ do va đập cơ khí",
         ],
         "severity_base": 0.6,
         "description": "Hư hỏng các bộ phận cơ khí",
@@ -179,6 +249,16 @@ FAULT_REFERENCES = {
             "tiếng va đập tiếng nổ gầm",
             "tiếng kẹt tiếng ù tiếng lạ",
             "kêu to kêu lớn tiếng cạch cạch",
+            "tiếng ồn bất thường kêu to liên tục từ motor",
+            "tiếng rít cao phát ra từ thiết bị khi vận hành",
+            "tiếng va đập lớn bên trong máy ồn bất thường",
+            "tiếng ù to liên tục từ motor chính",
+            "thiết bị phát tiếng kẹt nghiến khi hoạt động",
+            "âm thanh lạ phát ra liên tục ồn hơn bình thường",
+            "tiếng nổ nhỏ lách tách liên tục từ thiết bị",
+            "phát ra tiếng cọ sát lạ khi motor quay",
+            "tiếng ồn lớn bất thường khi thiết bị khởi động",
+            "tiếng kêu bất thường nghe rõ từ xa máy chạy",
         ],
         "severity_base": 0.5,
         "description": "Phát hiện âm thanh bất thường từ thiết bị",
@@ -190,6 +270,16 @@ FAULT_REFERENCES = {
             "tắt đột ngột chập chờn không ổn định",
             "hoạt động chậm kẹt treo máy",
             "quá tốc hiệu suất thấp năng suất giảm",
+            "máy chập chờn tắt bật liên tục không ổn định",
+            "thiết bị chạy chậm hẳn công suất sụt giảm rõ rệt",
+            "motor không khởi động được bấm nút không phản hồi",
+            "máy dừng đột ngột giữa chừng khi đang vận hành",
+            "thiết bị hoạt động yếu không đạt công suất thiết kế",
+            "motor chạy chậm hơn bình thường năng suất giảm",
+            "thiết bị tắt đột ngột không khởi động lại được",
+            "hiệu suất giảm rõ rệt máy chạy yếu hẳn",
+            "thiết bị không đạt tốc độ yêu cầu chạy chậm",
+            "công suất đầu ra giảm mạnh so với thông số thiết kế",
         ],
         "severity_base": 0.55,
         "description": "Thiết bị hoạt động không đạt hiệu suất mong đợi",
@@ -622,10 +712,23 @@ class NLPEngine:
         top_sim = dict(scores)[top_fault]  # Original similarity (không boost)
 
         # --- DECISION LOGIC ---
-        # Kiểm tra nếu kết quả là "Bình thường" HOẶC không có keyword nào
+        # Chỉ phân loại "Bình thường" khi CẢ HAI điều kiện đúng:
+        #   1. PhoBERT top match là "Bình thường"   VÀ
+        #   2. Không phát hiện keyword triệu chứng nào
+        # Nếu có keyword → bỏ qua "Bình thường", chọn loại lỗi cao nhất tiếp theo
         is_normal = self.fault_refs.get(top_fault, {}).get("is_normal", False)
 
-        if is_normal or (len(keywords) == 0):
+        # Nếu top là "Bình thường" NHƯNG có keywords → chọn fault type tiếp theo
+        if is_normal and len(keywords) > 0:
+            for fname, fscore in boosted_scores:
+                if not self.fault_refs.get(fname, {}).get("is_normal", False):
+                    top_fault = fname
+                    top_score = fscore
+                    top_sim = dict(scores)[fname]
+                    break
+            is_normal = False  # Đã chuyển sang fault type khác
+
+        if is_normal and len(keywords) == 0:
             fault_type = "Hoạt động ổn định"
             severity = "THẤP"
             severity_score = 0.0
