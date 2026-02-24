@@ -12,6 +12,12 @@ import json
 _BASE_DIR = Path(__file__).resolve().parent.parent  # → backend/
 DB_PATH = _BASE_DIR / "resources" / "database" / "history.db"
 
+# Ensure the database file exists
+DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+if not DB_PATH.exists():
+    # Print a message when creating the database file for the first time
+    print(f"📁 Creating new database file at: {DB_PATH}")
+    DB_PATH.touch()
 
 def get_connection():
     """Get database connection."""
