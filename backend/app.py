@@ -1,13 +1,13 @@
 """
-FastAPI Backend — Equipment Fault Analysis with PhoBERT NLP.
+FastAPI Backend — Equipment Fault Analysis with Multi-Engine NLP.
 """
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from backend.database import database as db
-from backend.model.schemas import AnalyzeRequest, AnalyzeResponse, HistoryResponse
-from backend.core.nlp_engine import analyze as nlp_analyze
+from backend.model.schemas import AnalyzeRequest, AnalyzeResponse, CompareResponse
+from backend.core.engine_factory import get_engine, list_engines
 
-app = FastAPI(title="Equipment Fault Analysis API (PhoBERT NLP)")
+app = FastAPI(title="Equipment Fault Analysis API (Multi-Engine NLP)")
 
 # Cho phép frontend gọi API
 app.add_middleware(
@@ -18,30 +18,8 @@ app.add_middleware(
 )
 
 
-# ---------- NLP Analysis ----------
-@app.post("/analyze", response_model=AnalyzeResponse)
-def analyze(req: AnalyzeRequest):
-    """
-    Phân tích mô tả thiết bị bằng PhoBERT NLP pipeline.
-    Input: equipment (loại thiết bị) + description (mô tả tự nhiên tiếng Việt)
-    Output: fault_type, severity, keywords, recommendations, summary, pipeline_steps
-    """
-    # Gọi NLP Engine (PhoBERT)
-    result = nlp_analyze(req.equipment, req.description)
-
-    # Save to database
-    record_id = db.save_analysis(
-        equipment=req.equipment,
-        description=req.description,
-        fault_type=result.fault_type,
-        severity=result.severity,
-        severity_score=result.severity_score,
-        confidence=result.confidence,
-        keywords=result.keywords,
-        recommendations=result.recommendations,
-        summary=result.summary,
-    )
-
+def _result_to_response(result, record_id=None) -> AnalyzeResponse:
+    """Chuyển AnalysisResult → AnalyzeResponse."""
     return AnalyzeResponse(
         id=record_id,
         fault_type=result.fault_type,
@@ -52,7 +30,67 @@ def analyze(req: AnalyzeRequest):
         recommendations=result.recommendations,
         summary=result.summary,
         pipeline_steps=result.pipeline_steps,
+        engine_name=result.engine_name,
+        engine_latency_ms=result.engine_latency_ms,
     )
+
+
+# ---------- NLP Analysis ----------
+@app.post("/analyze")
+def analyze(req: AnalyzeRequest):
+    """
+    Phân tích mô tả thiết bị bằng NLP pipeline.
+    Hỗ trợ: engine="phobert" | "tfidf" | "compare"
+    """
+    if req.engine == "compare":
+        # So sánh cả 2 engine
+        result_phobert = get_engine("phobert").analyze(req.equipment, req.description)
+        result_tfidf = get_engine("tfidf").analyze(req.equipment, req.description)
+
+        # Save PhoBERT result to DB (primary)
+        record_id = db.save_analysis(
+            equipment=req.equipment,
+            description=req.description,
+            fault_type=result_phobert.fault_type,
+            severity=result_phobert.severity,
+            severity_score=result_phobert.severity_score,
+            confidence=result_phobert.confidence,
+            keywords=result_phobert.keywords,
+            recommendations=result_phobert.recommendations,
+            summary=result_phobert.summary,
+            engine_name="compare",
+        )
+
+        return CompareResponse(
+            phobert=_result_to_response(result_phobert, record_id),
+            tfidf=_result_to_response(result_tfidf),
+        )
+    else:
+        # Single engine
+        engine = get_engine(req.engine)
+        result = engine.analyze(req.equipment, req.description)
+
+        record_id = db.save_analysis(
+            equipment=req.equipment,
+            description=req.description,
+            fault_type=result.fault_type,
+            severity=result.severity,
+            severity_score=result.severity_score,
+            confidence=result.confidence,
+            keywords=result.keywords,
+            recommendations=result.recommendations,
+            summary=result.summary,
+            engine_name=result.engine_name,
+        )
+
+        return _result_to_response(result, record_id)
+
+
+# ---------- Engine Info ----------
+@app.get("/engines")
+def get_available_engines():
+    """Trả về danh sách engine có sẵn."""
+    return {"engines": list_engines()}
 
 
 # ---------- History APIs ----------
@@ -123,4 +161,3 @@ def evaluation_summary():
         "recall_macro": report.get("recall_macro", 0),
         "per_class": report.get("per_class", {}),
     }
-

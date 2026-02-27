@@ -1,18 +1,24 @@
 """Quick verification of Phase 2 backend refactor."""
-from model.schemas import AnalyzeRequest, AnalyzeResponse, HistoryResponse
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+
+from backend.model.schemas import AnalyzeRequest, AnalyzeResponse, HistoryResponse, CompareResponse
 print("✅ Schemas imported OK")
 print("  AnalyzeRequest:", list(AnalyzeRequest.model_fields.keys()))
 print("  AnalyzeResponse:", list(AnalyzeResponse.model_fields.keys()))
+print("  CompareResponse:", list(CompareResponse.model_fields.keys()))
 
-from database import database as db
+from backend.database import database as db
 print("✅ Database imported OK")
 
-from nlp_engine import analyze as nlp_analyze
-print("✅ NLP Engine imported OK")
+from backend.core.engine_factory import get_engine
+engine = get_engine("phobert")
+print(f"✅ Engine Factory OK — loaded engine: {engine.name}")
 
 # Test NLP → DB pipeline
-result = nlp_analyze("Motor khu A", "Motor nóng bất thường, rung mạnh")
-print(f"✅ NLP: fault={result.fault_type} | severity={result.severity}")
+result = engine.analyze("Motor khu A", "Motor nóng bất thường, rung mạnh")
+print(f"✅ NLP: fault={result.fault_type} | severity={result.severity} | engine={result.engine_name} | latency={result.engine_latency_ms}ms")
 
 rid = db.save_analysis(
     equipment="Motor khu A",
@@ -24,6 +30,7 @@ rid = db.save_analysis(
     keywords=result.keywords,
     recommendations=result.recommendations,
     summary=result.summary,
+    engine_name=result.engine_name,
 )
 print(f"✅ DB save OK, id={rid}")
 

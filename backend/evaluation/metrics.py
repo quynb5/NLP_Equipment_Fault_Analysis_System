@@ -64,6 +64,7 @@ def save_confusion_matrix_heatmap(
     cm_df: pd.DataFrame,
     filepath: str = None,
     figsize: tuple = (14, 11),
+    title: str = None,
 ):
     """
     Vẽ và lưu confusion matrix dạng heatmap.
@@ -106,7 +107,7 @@ def save_confusion_matrix_heatmap(
 
     ax.set_xlabel("Predicted Label", fontsize=12, labelpad=10)
     ax.set_ylabel("True Label", fontsize=12, labelpad=10)
-    ax.set_title("Confusion Matrix — PhoBERT NLP Engine (10 Fault Types)", fontsize=14, pad=15)
+    ax.set_title(title or "Confusion Matrix — NLP Engine (10 Fault Types)", fontsize=14, pad=15)
 
     plt.xticks(rotation=45, ha="right", fontsize=9)
     plt.yticks(rotation=0, fontsize=9)
@@ -177,6 +178,7 @@ def save_metrics_txt(
     labels: list[str],
     latency_stats: dict = None,
     filepath: str = None,
+    engine_name: str = "phobert",
 ):
     """Lưu classification report dạng text."""
     if filepath is None:
@@ -186,7 +188,7 @@ def save_metrics_txt(
 
     with open(filepath, "w", encoding="utf-8") as f:
         f.write("=" * 70 + "\n")
-        f.write("  EVALUATION REPORT — PhoBERT NLP Engine\n")
+        f.write(f"  EVALUATION REPORT — {engine_name.upper()} Engine\n")
         f.write("=" * 70 + "\n\n")
         f.write("Classification Report:\n\n")
         f.write(report_str)

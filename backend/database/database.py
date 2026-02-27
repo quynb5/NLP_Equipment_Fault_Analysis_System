@@ -43,14 +43,15 @@ def init_db():
             equipment TEXT NOT NULL,
             description TEXT NOT NULL,
 
-            -- Output data (PhoBERT results)
+            -- Output data (engine results)
             fault_type TEXT NOT NULL,
             severity TEXT NOT NULL,
             severity_score REAL DEFAULT 0.0,
             confidence REAL DEFAULT 0.0,
             keywords TEXT NOT NULL,
             recommendations TEXT NOT NULL,
-            summary TEXT NOT NULL
+            summary TEXT NOT NULL,
+            engine_name TEXT DEFAULT 'phobert'
         )
     """)
 
@@ -70,7 +71,8 @@ def save_analysis(
     confidence: float,
     keywords: list[str],
     recommendations: list[str],
-    summary: str
+    summary: str,
+    engine_name: str = "phobert",
 ) -> int:
     """
     Save an NLP analysis record to database.
@@ -82,14 +84,14 @@ def save_analysis(
     cursor.execute("""
         INSERT INTO analysis_history
         (equipment, description, fault_type, severity, severity_score,
-         confidence, keywords, recommendations, summary)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+         confidence, keywords, recommendations, summary, engine_name)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, (
         equipment, description,
         fault_type, severity, severity_score, confidence,
         json.dumps(keywords, ensure_ascii=False),
         json.dumps(recommendations, ensure_ascii=False),
-        summary
+        summary, engine_name
     ))
 
     record_id = cursor.lastrowid

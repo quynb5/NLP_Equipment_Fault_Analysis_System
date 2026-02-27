@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HỆ THỐNG PHÂN TÍCH CẢNH BÁO LỖI THIẾT BỊ — PhoBERT NLP</title>
+  <title>HỆ THỐNG PHÂN TÍCH CẢNH BÁO LỖI THIẾT BỊ — Multi-Engine NLP</title>
   <style>
     * {
       margin: 0;
@@ -61,6 +61,108 @@
       border-radius: 12px;
       margin-top: 8px;
       letter-spacing: 1px;
+    }
+
+    /* Engine selector */
+    .engine-selector {
+      margin-top: 15px;
+    }
+
+    .engine-selector label {
+      font-size: 0.9rem;
+      color: #444;
+      margin-bottom: 4px;
+    }
+
+    .engine-radio-group {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .engine-radio-group label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 8px 14px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      background: #f8f9fa;
+    }
+
+    .engine-radio-group label:hover {
+      border-color: #0047ba;
+      background: #eef3ff;
+    }
+
+    .engine-radio-group input[type="radio"] {
+      accent-color: #0047ba;
+    }
+
+    .engine-radio-group input[type="radio"]:checked+span {
+      color: #0047ba;
+      font-weight: 700;
+    }
+
+    .engine-radio-group label:has(input:checked) {
+      border-color: #0047ba;
+      background: #e8f0fe;
+    }
+
+    /* Engine info badge */
+    .engine-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    .engine-badge.phobert {
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      color: white;
+    }
+
+    .engine-badge.tfidf {
+      background: linear-gradient(90deg, #f093fb, #f5576c);
+      color: white;
+    }
+
+    .latency-badge {
+      display: inline-block;
+      background: rgba(0, 0, 0, 0.08);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.7rem;
+      color: #555;
+      margin-left: 6px;
+    }
+
+    /* Compare mode */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .compare-col {
+      border: 2px solid #eee;
+      border-radius: 10px;
+      padding: 15px;
+      background: #fafbfc;
+    }
+
+    .compare-col h4 {
+      margin-bottom: 10px;
+      font-size: 0.95rem;
     }
 
     .nav-menu {
@@ -793,6 +895,15 @@
                 <option value="Băng tải">Băng tải</option>
               </select>
 
+              <div class="engine-selector">
+                <label>Chọn engine phân tích:</label>
+                <div class="engine-radio-group">
+                  <label><input type="radio" name="engine" value="phobert" checked><span>🧠 PhoBERT</span></label>
+                  <label><input type="radio" name="engine" value="tfidf"><span>⚡ TF-IDF</span></label>
+                  <label><input type="radio" name="engine" value="compare"><span>🔀 So sánh</span></label>
+                </div>
+              </div>
+
               <label>Mô tả tình trạng (tiếng Việt tự nhiên):</label>
               <textarea id="mo-ta"
                 placeholder="Ví dụ: Motor khu A nóng bất thường, rung mạnh, nghe tiếng kim loại va chạm..."></textarea>
@@ -806,7 +917,7 @@
               </div>
 
               <button class="btn-analyze" id="btn-analyze" onclick="phanTich()">
-                🔍 Phân Tích Bằng PhoBERT
+                🔍 Phân Tích
               </button>
             </div>
           </div>
@@ -817,8 +928,9 @@
             <div class="card-body" id="ketqua">
               <div class="result-placeholder">
                 <div class="icon">🤖</div>
-                <h3>PhoBERT NLP Engine</h3>
-                <p style="margin-top:10px; color:#999;">Nhập mô tả tình trạng thiết bị và nhấn "Phân Tích" để bắt đầu
+                <h3>Multi-Engine NLP</h3>
+                <p style="margin-top:10px; color:#999;">Chọn engine và nhập mô tả tình trạng thiết bị, sau đó nhấn "Phân
+                  Tích" để bắt đầu
                 </p>
               </div>
             </div>
@@ -827,7 +939,7 @@
 
         <!-- Pipeline NLP -->
         <div class="tong-hop" id="pipeline-box" style="display:none;">
-          <strong>🔬 Pipeline NLP (PhoBERT):</strong>
+          <strong>🔬 Pipeline NLP:</strong>
           <div id="pipeline-content" class="pipeline-steps" style="margin-top:12px;"></div>
         </div>
 
@@ -962,9 +1074,13 @@
       btn.disabled = true;
       btn.innerHTML = '<span class="spinner"></span> Đang phân tích...';
 
+      const engineRadio = document.querySelector('input[name="engine"]:checked');
+      const engine = engineRadio ? engineRadio.value : 'phobert';
+
       const data = {
         equipment: document.getElementById("loai-thiet-bi").value,
-        description: description
+        description: description,
+        engine: engine
       };
 
       try {
@@ -975,18 +1091,23 @@
         });
 
         const result = await res.json();
-        displayResult(result);
+
+        if (engine === 'compare') {
+          displayCompare(result);
+        } else {
+          displayResult(result);
+        }
 
       } catch (err) {
         alert("Không thể kết nối tới server phân tích!");
         console.error(err);
       } finally {
         btn.disabled = false;
-        btn.innerHTML = '🔍 Phân Tích Bằng PhoBERT';
+        btn.innerHTML = '🔍 Phân Tích';
       }
     }
 
-    // Display analysis result
+    // Display analysis result (single engine)
     function displayResult(result) {
       const container = document.getElementById("ketqua");
 
@@ -1010,7 +1131,18 @@
       const confPct = Math.round((result.confidence || 0) * 100);
       const scorePct = Math.round((result.severity_score || 0) * 100);
 
+      // Engine info
+      const engineName = result.engine_name || 'phobert';
+      const latency = result.engine_latency_ms || 0;
+      const engineBadgeClass = engineName === 'phobert' ? 'phobert' : 'tfidf';
+      const engineLabel = engineName === 'phobert' ? '🧠 PhoBERT' : '⚡ TF-IDF';
+
       container.innerHTML = `
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <span class="engine-badge ${engineBadgeClass}">${engineLabel}</span>
+          <span class="latency-badge">⏱ ${latency.toFixed(1)}ms</span>
+        </div>
+
         <div class="fault-type ${sevClass === 'nghiem-trong' ? 'fault-high' : sevClass === 'canh-bao' ? 'fault-medium' : 'fault-low'}">${sevClass === 'nghiem-trong' ? '🔴' : sevClass === 'canh-bao' ? '🟡' : '🟢'} ${result.fault_type}</div>
 
         <div>Mức Độ Cảnh Báo:</div>
@@ -1018,7 +1150,7 @@
 
         <div class="confidence-section">
           <div class="confidence-label">
-            <span>Confidence (PhoBERT)</span>
+            <span>Confidence (${engineLabel})</span>
             <span><strong>${confPct}%</strong></span>
           </div>
           <div class="confidence-bar-bg">
@@ -1058,6 +1190,60 @@
       if (result.pipeline_steps && result.pipeline_steps.length > 0) {
         displayPipeline(result.pipeline_steps);
       }
+    }
+
+    // Display compare mode (2 engines side by side)
+    function displayCompare(result) {
+      const container = document.getElementById("ketqua");
+
+      function renderCol(r, label, badgeClass) {
+        const confPct = Math.round((r.confidence || 0) * 100);
+        const scorePct = Math.round((r.severity_score || 0) * 100);
+        const latency = r.engine_latency_ms || 0;
+        let sevClass = 'thap';
+        if (r.severity === 'NGHIÊM TRỌNG') sevClass = 'nghiem-trong';
+        else if (r.severity === 'CẢNH BÁO') sevClass = 'canh-bao';
+
+        const kwHTML = (r.keywords && r.keywords.length > 0)
+          ? r.keywords.map(k => `<span class="keyword-tag">${k}</span>`).join('')
+          : '<span class="keyword-tag empty">—</span>';
+
+        return `
+          <div class="compare-col">
+            <h4><span class="engine-badge ${badgeClass}">${label}</span>
+                <span class="latency-badge">⏱ ${latency.toFixed(1)}ms</span></h4>
+            <div class="fault-type ${sevClass === 'nghiem-trong' ? 'fault-high' : sevClass === 'canh-bao' ? 'fault-medium' : 'fault-low'}" style="font-size:0.95rem;padding:8px 12px;">
+              ${sevClass === 'nghiem-trong' ? '🔴' : sevClass === 'canh-bao' ? '🟡' : '🟢'} ${r.fault_type}
+            </div>
+            <div style="margin:8px 0;"><strong>${r.severity}</strong> (${scorePct}%)</div>
+            <div class="confidence-section">
+              <div class="confidence-label"><span>Confidence</span><span><strong>${confPct}%</strong></span></div>
+              <div class="confidence-bar-bg"><div class="confidence-bar" style="width:${confPct}%"></div></div>
+            </div>
+            <div class="keywords-section" style="margin-top:8px;">
+              <strong style="font-size:0.8rem;">🏷️ Từ khóa:</strong>
+              <div class="keyword-tags">${kwHTML}</div>
+            </div>
+          </div>
+        `;
+      }
+
+      container.innerHTML = `
+        <div style="text-align:center; margin-bottom:12px;">
+          <strong style="font-size:1.1rem;">🔀 So Sánh Engine</strong>
+        </div>
+        <div class="compare-grid">
+          ${renderCol(result.phobert, '🧠 PhoBERT', 'phobert')}
+          ${renderCol(result.tfidf, '⚡ TF-IDF', 'tfidf')}
+        </div>
+      `;
+
+      // Summary from PhoBERT (primary)
+      document.getElementById("mo-ta-tong-hop").textContent = result.phobert.summary;
+      document.getElementById("tong-hop").style.display = "block";
+
+      // Hide pipeline in compare mode
+      document.getElementById("pipeline-box").style.display = "none";
     }
 
     // Display NLP pipeline

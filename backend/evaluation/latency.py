@@ -2,27 +2,30 @@
 TASK 05 — Latency Measurement (CPU)
 ====================================
 Đo thời gian xử lý trung bình cho mỗi câu mô tả trên CPU.
+Hỗ trợ multi-engine.
 """
 import time
 import numpy as np
-from backend.core.nlp_engine import analyze
+from backend.core.engine_factory import get_engine
 
 
-def measure_latency(texts: list[str]) -> dict:
+def measure_latency(texts: list[str], engine_name: str = "phobert") -> dict:
     """
     Đo latency cho từng câu trong danh sách texts.
 
     Args:
         texts: Danh sách các mô tả cần đo
+        engine_name: "phobert" hoặc "tfidf"
 
     Returns:
         dict chứa mean, min, max, p95 latency (ms) và danh sách latency từng câu
     """
+    engine = get_engine(engine_name)
     latencies = []
 
     for text in texts:
         start = time.perf_counter()
-        analyze(equipment="Thiết bị", description=text)
+        engine.analyze(equipment="Thiết bị", description=text)
         end = time.perf_counter()
         latency_ms = (end - start) * 1000  # Convert to milliseconds
         latencies.append(latency_ms)

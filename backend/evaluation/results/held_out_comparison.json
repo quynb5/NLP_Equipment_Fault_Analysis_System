@@ -1,0 +1,146 @@
+{
+  "tfidf": {
+    "accuracy": 0.8169,
+    "f1_macro": 0.8164,
+    "precision_macro": 0.8471,
+    "recall_macro": 0.8214,
+    "per_class": {
+      "Hoạt động ổn định": {
+        "precision": 0.7778,
+        "recall": 0.875,
+        "f1-score": 0.8235,
+        "support": 8.0
+      },
+      "Quá nhiệt": {
+        "precision": 0.7778,
+        "recall": 1.0,
+        "f1-score": 0.875,
+        "support": 7.0
+      },
+      "Hỏng bạc đạn / vòng bi": {
+        "precision": 1.0,
+        "recall": 0.5714,
+        "f1-score": 0.7273,
+        "support": 7.0
+      },
+      "Cháy cuộn dây / cháy motor": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 6.0
+      },
+      "Sự cố điện": {
+        "precision": 0.8333,
+        "recall": 0.625,
+        "f1-score": 0.7143,
+        "support": 8.0
+      },
+      "Quá tải cơ khí": {
+        "precision": 1.0,
+        "recall": 0.5714,
+        "f1-score": 0.7273,
+        "support": 7.0
+      },
+      "Rò rỉ hệ thống": {
+        "precision": 0.8571,
+        "recall": 0.8571,
+        "f1-score": 0.8571,
+        "support": 7.0
+      },
+      "Hư hỏng cơ khí": {
+        "precision": 0.75,
+        "recall": 0.8571,
+        "f1-score": 0.8,
+        "support": 7.0
+      },
+      "Âm thanh bất thường": {
+        "precision": 0.875,
+        "recall": 1.0,
+        "f1-score": 0.9333,
+        "support": 7.0
+      },
+      "Giảm hiệu suất": {
+        "precision": 0.6,
+        "recall": 0.8571,
+        "f1-score": 0.7059,
+        "support": 7.0
+      }
+    },
+    "latency_mean_ms": 2.63,
+    "latency_p95_ms": 2.84,
+    "misclassified": 13,
+    "total": 71
+  },
+  "phobert": {
+    "accuracy": 0.6338,
+    "f1_macro": 0.6395,
+    "precision_macro": 0.6781,
+    "recall_macro": 0.6399,
+    "per_class": {
+      "Hoạt động ổn định": {
+        "precision": 0.75,
+        "recall": 0.375,
+        "f1-score": 0.5,
+        "support": 8.0
+      },
+      "Quá nhiệt": {
+        "precision": 0.7143,
+        "recall": 0.7143,
+        "f1-score": 0.7143,
+        "support": 7.0
+      },
+      "Hỏng bạc đạn / vòng bi": {
+        "precision": 0.8,
+        "recall": 0.5714,
+        "f1-score": 0.6667,
+        "support": 7.0
+      },
+      "Cháy cuộn dây / cháy motor": {
+        "precision": 0.6667,
+        "recall": 0.6667,
+        "f1-score": 0.6667,
+        "support": 6.0
+      },
+      "Sự cố điện": {
+        "precision": 0.8,
+        "recall": 0.5,
+        "f1-score": 0.6154,
+        "support": 8.0
+      },
+      "Quá tải cơ khí": {
+        "precision": 0.375,
+        "recall": 0.4286,
+        "f1-score": 0.4,
+        "support": 7.0
+      },
+      "Rò rỉ hệ thống": {
+        "precision": 0.8333,
+        "recall": 0.7143,
+        "f1-score": 0.7692,
+        "support": 7.0
+      },
+      "Hư hỏng cơ khí": {
+        "precision": 0.6,
+        "recall": 0.8571,
+        "f1-score": 0.7059,
+        "support": 7.0
+      },
+      "Âm thanh bất thường": {
+        "precision": 0.8571,
+        "recall": 0.8571,
+        "f1-score": 0.8571,
+        "support": 7.0
+      },
+      "Giảm hiệu suất": {
+        "precision": 0.3846,
+        "recall": 0.7143,
+        "f1-score": 0.5,
+        "support": 7.0
+      }
+    },
+    "latency_mean_ms": 33.47,
+    "latency_p95_ms": 36.33,
+    "misclassified": 26,
+    "total": 71
+  }
+}

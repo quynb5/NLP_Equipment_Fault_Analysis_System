@@ -1,5 +1,8 @@
 """Test PhoBERT NLP Engine."""
-from nlp_engine import analyze
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+from backend.core.phobert_engine import analyze
 
 print("=" * 60)
 print("TEST PhoBERT NLP Engine")
