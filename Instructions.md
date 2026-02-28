@@ -89,6 +89,7 @@ Project này có **5 file tài liệu `.md`**, mỗi file phục vụ một mụ
 - **7 mẫu cụ thể** TF-IDF đúng, PhoBERT sai — phân tích điểm yếu
 - **5 Pattern** giải thích TF-IDF kém hơn
 - Trade-offs giữa 2 engines
+- **5 lý do thuyết phục** nên chọn PhoBERT thay vì TF-IDF
 
 **Khi nào đọc**: Khi cần chứng minh PhoBERT tốt hơn TF-IDF cho báo cáo
 
@@ -100,6 +101,12 @@ Project này có **5 file tài liệu `.md`**, mỗi file phục vụ một mụ
   3. Paraphrasing — TF-IDF fail khi dùng cách diễn đạt khác
   4. Fine-grained vs Coarse Classification — TF-IDF default class chung chung
   5. Confidence Gap — PhoBERT tự tin hơn (0.87 vs 0.26)
+- [ ] **5 lý do chọn PhoBERT** (dù accuracy gần nhau):
+  1. Tiềm năng scale — thêm data PhoBERT cải thiện mạnh, TF-IDF saturate
+  2. Semantic understanding — xử lý real-world input đa dạng
+  3. Root cause detection — phân loại đúng nguyên nhân gốc
+  4. Confidence calibration — tin cậy hơn khi deploy production
+  5. Multi-task extensibility — mở rộng cho NER, QA, sentiment...
 - [ ] **PhoBERT yếu ở đâu**: Nhận diện "Hoạt động ổn định" (F1=0.93 vs TF-IDF 1.00)
 - [ ] **Trade-offs**: PhoBERT chậm hơn 10x (30ms vs 3ms), nặng hơn 10,000x (540MB vs 50KB)
 
