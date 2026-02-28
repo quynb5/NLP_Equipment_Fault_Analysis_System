@@ -223,3 +223,16 @@ PhoBERT là **general-purpose language model** — có thể mở rộng thêm n
 | Text Similarity (tìm lỗi tương tự) | ✅ | Hạn chế |
 
 > **Kết luận**: Đầu tư vào PhoBERT = nền tảng cho hệ thống NLP toàn diện, mở ra khả năng mở rộng mà TF-IDF không thể.
+
+---
+
+## 10. Tổng kết — Cách trình bày với giáo viên
+
+> *"Mặc dù accuracy hiện tại gần nhau (89.93% vs 89.26%), nhưng PhoBERT có **4 ưu thế chiến lược** so với TF-IDF:*
+>
+> 1. ***Tiềm năng scale**: thêm data → PhoBERT cải thiện mạnh, TF-IDF gần saturate*
+> 2. ***Semantic understanding**: hoạt động tốt với real-world input đa dạng*
+> 3. ***Root cause detection**: phân loại đúng nguyên nhân gốc, không bị triệu chứng phụ đánh lừa*
+> 4. ***Confidence calibration**: tự tin hơn gấp 2x → tin cậy hơn khi deploy production*
+>
+> *PhoBERT phù hợp hơn cho hệ thống production lâu dài, TF-IDF phù hợp làm baseline comparison."*
