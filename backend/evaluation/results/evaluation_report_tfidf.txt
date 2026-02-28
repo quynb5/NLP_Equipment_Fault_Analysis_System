@@ -26,9 +26,9 @@ Cháy cuộn dây / cháy motor       0.93      0.87      0.90        15
   LATENCY STATS (CPU)
 ======================================================================
 
-  Mean:  2.94 ms
-  Min:   2.77 ms
-  Max:   4.50 ms
-  P95:   3.32 ms
+  Mean:  2.96 ms
+  Min:   2.71 ms
+  Max:   4.24 ms
+  P95:   3.68 ms
   Total: 149 samples
 

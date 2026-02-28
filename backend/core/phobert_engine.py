@@ -2,12 +2,12 @@
 PhoBERT Engine - Vietnamese Industrial Equipment Fault Analysis
 ===============================================================
 Pipeline: Vietnamese text → Preprocessing → PhoBERT Tokenization
-           → PhoBERT Encoding → Semantic Fault Classification
+           → PhoBERT Encoding → Fault Classification
            → Severity Scoring → Recommendation Generation
 
-Sử dụng PhoBERT (vinai/phobert-base) để encode mô tả thiết bị,
-sau đó so sánh cosine similarity với các mẫu lỗi đã định nghĩa
-để phân loại lỗi và đánh giá mức độ nghiêm trọng.
+Hỗ trợ 2 chế độ:
+  1. Fine-tuned Classifier (nếu có model đã train)
+  2. Zero-shot Cosine Similarity (fallback)
 """
 
 import re
@@ -17,6 +17,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = ""  # Force CPU mode
 import time
 import unicodedata
 import torch
+import torch.nn as nn
 from transformers import AutoModel, AutoTokenizer
 
 from backend.core.base_engine import BaseNLPEngine, AnalysisResult
@@ -67,6 +68,71 @@ _device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 _model.to(_device)
 
 print(f"✅ PhoBERT ready on {_device}")
+
+
+# ============================================================
+# 1b. FINE-TUNED CLASSIFIER (optional)
+# ============================================================
+
+class _PhoBERTClassifier(nn.Module):
+    """PhoBERT + Linear classification head."""
+    def __init__(self, phobert_model, num_classes=10, dropout=0.3):
+        super().__init__()
+        self.phobert = phobert_model
+        hidden_size = self.phobert.config.hidden_size
+        self.dropout = nn.Dropout(dropout)
+        self.classifier = nn.Linear(hidden_size, num_classes)
+
+    def forward(self, input_ids, attention_mask):
+        outputs = self.phobert(input_ids=input_ids, attention_mask=attention_mask)
+        cls_output = outputs.last_hidden_state[:, 0, :]
+        cls_output = self.dropout(cls_output)
+        logits = self.classifier(cls_output)
+        return logits
+
+
+_FINETUNED_DIR = _pathlib.Path(__file__).resolve().parent.parent / "resources" / "phobert-finetuned"
+_finetuned_model = None
+_finetuned_labels = None
+
+
+def _load_finetuned_model():
+    """Load fine-tuned PhoBERT classifier nếu có."""
+    global _finetuned_model, _finetuned_labels
+
+    model_path = _FINETUNED_DIR / "model.pt"
+    head_path = _FINETUNED_DIR / "classifier_head.pt"
+
+    if not model_path.exists():
+        print("ℹ️  Fine-tuned model not found → using zero-shot similarity")
+        return
+
+    try:
+        head_info = torch.load(head_path, map_location="cpu", weights_only=False)
+        num_classes = head_info["num_classes"]
+        dropout_p = head_info.get("dropout_p", 0.3)
+        _finetuned_labels = head_info["label_classes"]
+
+        classifier = _PhoBERTClassifier(
+            phobert_model=_model,
+            num_classes=num_classes,
+            dropout=dropout_p,
+        )
+
+        state_dict = torch.load(model_path, map_location=_device, weights_only=False)
+        classifier.load_state_dict(state_dict, strict=False)
+        classifier.to(_device)
+        classifier.eval()
+
+        _finetuned_model = classifier
+        print(f"✅ Fine-tuned PhoBERT classifier loaded ({num_classes} classes)")
+        print(f"   Labels: {_finetuned_labels}")
+    except Exception as e:
+        print(f"⚠️  Failed to load fine-tuned model: {e}")
+        print("   Falling back to zero-shot similarity")
+
+
+_load_finetuned_model()
 
 
 # ============================================================
@@ -568,7 +634,17 @@ class PhoBERTEngine(BaseNLPEngine):
         self.fault_refs = FAULT_REFERENCES
         self.recommendations_db = RECOMMENDATIONS_DB
 
-        # Pre-compute embeddings cho các mẫu tham chiếu
+        # Fine-tuned classifier (nếu có)
+        self.finetuned_model = _finetuned_model
+        self.finetuned_labels = _finetuned_labels
+        self.use_finetuned = _finetuned_model is not None
+
+        if self.use_finetuned:
+            print("🔥 PhoBERTEngine: using FINE-TUNED classifier")
+        else:
+            print("🔄 PhoBERTEngine: using zero-shot similarity (fallback)")
+
+        # Pre-compute embeddings (luôn cần cho severity assessment)
         self.ref_embeddings = {}
         self._precompute_reference_embeddings()
 
@@ -668,9 +744,39 @@ class PhoBERTEngine(BaseNLPEngine):
     # ----------------------------------------------------------
     def classify_fault_phobert(self, text: str) -> list:
         """
-        Phân loại lỗi bằng PhoBERT cosine similarity.
-        Returns: danh sách (fault_name, similarity_score) đã sắp xếp giảm dần.
+        Phân loại lỗi bằng PhoBERT.
+        - Nếu có fine-tuned model → softmax classifier
+        - Nếu không → fallback cosine similarity
+        Returns: danh sách (fault_name, score) đã sắp xếp giảm dần.
         """
+        if self.use_finetuned:
+            return self._classify_finetuned(text)
+        else:
+            return self._classify_zero_shot(text)
+
+    @torch.no_grad()
+    def _classify_finetuned(self, text: str) -> list:
+        """Phân loại bằng fine-tuned classifier (softmax)."""
+        inputs = self.tokenizer(
+            text,
+            return_tensors="pt",
+            padding=True,
+            truncation=True,
+            max_length=256,
+        ).to(self.device)
+
+        logits = self.finetuned_model(**inputs)
+        probs = torch.softmax(logits, dim=1).squeeze(0).cpu()
+
+        scores = []
+        for idx, label in enumerate(self.finetuned_labels):
+            scores.append((label, probs[idx].item()))
+
+        scores.sort(key=lambda x: x[1], reverse=True)
+        return scores
+
+    def _classify_zero_shot(self, text: str) -> list:
+        """Fallback: phân loại bằng cosine similarity."""
         text_embedding = self._encode_text(text)
 
         scores = []
@@ -681,7 +787,6 @@ class PhoBERTEngine(BaseNLPEngine):
             ).item()
             scores.append((fault_name, similarity))
 
-        # Sắp xếp giảm dần theo similarity
         scores.sort(key=lambda x: x[1], reverse=True)
         return scores
 
@@ -768,79 +873,91 @@ class PhoBERTEngine(BaseNLPEngine):
             "output": keywords,
         })
 
-        # Step 4: PhoBERT Semantic Classification
+        # Step 4: PhoBERT Classification
+        classify_method = "Fine-tuned Classifier" if self.use_finetuned else "Cosine Similarity"
         scores = self.classify_fault_phobert(cleaned)
         top_5 = scores[:5]
 
         pipeline_steps.append({
             "step": 4,
-            "name": "PhoBERT Phân loại lỗi (Cosine Similarity)",
+            "name": f"PhoBERT Phân loại lỗi ({classify_method})",
             "input": "PhoBERT embedding (768-dim)",
             "output": [{
                 "fault": ("✅ " if self.fault_refs.get(f, {}).get("is_normal", False) else "⚠️ ") + f,
-                "similarity": round(s, 4),
+                "score": round(s, 4),
             } for f, s in top_5],
         })
 
-        # --- KEYWORD-AWARE RE-RANKING ---
-        # Kết hợp PhoBERT similarity với keyword detection
-        # Nếu có keywords thuộc category nào → boost fault type liên quan
-        keyword_categories = set(k["category"] for k in keywords)
-
-        # Mapping category → related fault types
-        CATEGORY_FAULT_MAP = {
-            "Nhiệt độ": ["Quá nhiệt", "Cháy cuộn dây / cháy motor", "Quá tải cơ khí"],
-            "Rung động": ["Hỏng bạc đạn / vòng bi", "Quá tải cơ khí"],
-            "Âm thanh": ["Hỏng bạc đạn / vòng bi", "Âm thanh bất thường"],
-            "Mùi": ["Cháy cuộn dây / cháy motor"],
-            "Điện": ["Sự cố điện", "Cháy cuộn dây / cháy motor"],
-            "Rò rỉ": ["Rò rỉ hệ thống"],
-            "Cơ khí": ["Hư hỏng cơ khí", "Hỏng bạc đạn / vòng bi"],
-            "Hiệu suất": ["Giảm hiệu suất", "Quá tải cơ khí"],
-        }
-
-        # Boost scores dựa trên keyword categories
-        boosted_scores = []
-        for fault_name, sim in scores:
-            boost = 0.0
-            for cat in keyword_categories:
-                related = CATEGORY_FAULT_MAP.get(cat, [])
-                if fault_name in related:
-                    boost += 0.1  # Boost 0.1 cho mỗi category match
-            boosted_scores.append((fault_name, sim + boost))
-
-        boosted_scores.sort(key=lambda x: x[1], reverse=True)
-        top_fault, top_score = boosted_scores[0]
-        top_sim = dict(scores)[top_fault]  # Original similarity (không boost)
-
         # --- DECISION LOGIC ---
-        # Chỉ phân loại "Bình thường" khi CẢ HAI điều kiện đúng:
-        #   1. PhoBERT top match là "Bình thường"   VÀ
-        #   2. Không phát hiện keyword triệu chứng nào
-        # Nếu có keyword → bỏ qua "Bình thường", chọn loại lỗi cao nhất tiếp theo
-        is_normal = self.fault_refs.get(top_fault, {}).get("is_normal", False)
+        if self.use_finetuned:
+            # Fine-tuned classifier: scores đã là softmax probabilities, dùng trực tiếp
+            top_fault, top_score = scores[0]
+            top_sim = top_score  # Probability thay cho similarity
 
-        # Nếu top là "Bình thường" NHƯNG có keywords → chọn fault type tiếp theo
-        if is_normal and len(keywords) > 0:
-            for fname, fscore in boosted_scores:
-                if not self.fault_refs.get(fname, {}).get("is_normal", False):
-                    top_fault = fname
-                    top_score = fscore
-                    top_sim = dict(scores)[fname]
-                    break
-            is_normal = False  # Đã chuyển sang fault type khác
+            # Map label name nếu cần
+            is_normal = (top_fault == "Hoạt động ổn định")
 
-        if is_normal and len(keywords) == 0:
-            fault_type = "Hoạt động ổn định"
-            severity = "THẤP"
-            severity_score = 0.0
-            confidence = round(top_sim, 2)
-            recommendations = RECOMMENDATIONS_DB["_default"]
+            if is_normal:
+                fault_type = "Hoạt động ổn định"
+                severity = "BÌNH THƯỜNG"
+                severity_score = 0.0
+                confidence = round(top_sim, 2)
+                recommendations = RECOMMENDATIONS_DB["_default"]
+            else:
+                fault_type = top_fault
+                severity, severity_score = self.assess_severity(fault_type, top_sim, keywords)
+                confidence = round(top_sim, 2)
+                recommendations = self.recommendations_db.get(fault_type, self.recommendations_db["_default"])
         else:
-            fault_type = top_fault
-            severity, severity_score = self.assess_severity(fault_type, top_sim, keywords)
-            confidence = round(top_sim, 2)
-            recommendations = self.recommendations_db.get(fault_type, self.recommendations_db["_default"])
+            # Zero-shot mode: áp dụng keyword re-ranking + Bình thường heuristics
+            keyword_categories = set(k["category"] for k in keywords)
+
+            CATEGORY_FAULT_MAP = {
+                "Nhiệt độ": ["Quá nhiệt", "Cháy cuộn dây / cháy motor", "Quá tải cơ khí"],
+                "Rung động": ["Hỏng bạc đạn / vòng bi", "Quá tải cơ khí"],
+                "Âm thanh": ["Hỏng bạc đạn / vòng bi", "Âm thanh bất thường"],
+                "Mùi": ["Cháy cuộn dây / cháy motor"],
+                "Điện": ["Sự cố điện", "Cháy cuộn dây / cháy motor"],
+                "Rò rỉ": ["Rò rỉ hệ thống"],
+                "Cơ khí": ["Hư hỏng cơ khí", "Hỏng bạc đạn / vòng bi"],
+                "Hiệu suất": ["Giảm hiệu suất", "Quá tải cơ khí"],
+            }
+
+            boosted_scores = []
+            for fault_name, sim in scores:
+                boost = 0.0
+                for cat in keyword_categories:
+                    related = CATEGORY_FAULT_MAP.get(cat, [])
+                    if fault_name in related:
+                        boost += 0.1
+                boosted_scores.append((fault_name, sim + boost))
+
+            boosted_scores.sort(key=lambda x: x[1], reverse=True)
+            top_fault, top_score = boosted_scores[0]
+            top_sim = dict(scores)[top_fault]
+
+            is_normal = self.fault_refs.get(top_fault, {}).get("is_normal", False)
+
+            if is_normal and len(keywords) > 0:
+                for fname, fscore in boosted_scores:
+                    if not self.fault_refs.get(fname, {}).get("is_normal", False):
+                        top_fault = fname
+                        top_score = fscore
+                        top_sim = dict(scores)[fname]
+                        break
+                is_normal = False
+
+            if is_normal and len(keywords) == 0:
+                fault_type = "Hoạt động ổn định"
+                severity = "BÌNH THƯỜNG"
+                severity_score = 0.0
+                confidence = round(top_sim, 2)
+                recommendations = RECOMMENDATIONS_DB["_default"]
+            else:
+                fault_type = top_fault
+                severity, severity_score = self.assess_severity(fault_type, top_sim, keywords)
+                confidence = round(top_sim, 2)
+                recommendations = self.recommendations_db.get(fault_type, self.recommendations_db["_default"])
 
         pipeline_steps.append({
             "step": 5,

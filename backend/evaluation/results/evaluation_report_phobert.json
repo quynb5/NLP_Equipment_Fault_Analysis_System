@@ -1,75 +1,75 @@
 {
-  "accuracy": 0.7383,
-  "precision_macro": 0.7767,
-  "recall_macro": 0.7381,
-  "f1_macro": 0.7402,
+  "accuracy": 0.8993,
+  "precision_macro": 0.9063,
+  "recall_macro": 0.8986,
+  "f1_macro": 0.8999,
   "per_class": {
     "Hoạt động ổn định": {
       "precision": 1.0,
-      "recall": 0.6,
-      "f1-score": 0.75,
+      "recall": 0.8667,
+      "f1-score": 0.9286,
       "support": 15.0
     },
     "Quá nhiệt": {
-      "precision": 0.8333,
-      "recall": 0.7143,
-      "f1-score": 0.7692,
+      "precision": 0.9167,
+      "recall": 0.7857,
+      "f1-score": 0.8462,
       "support": 14.0
     },
     "Hỏng bạc đạn / vòng bi": {
-      "precision": 0.75,
-      "recall": 0.6,
-      "f1-score": 0.6667,
+      "precision": 0.875,
+      "recall": 0.9333,
+      "f1-score": 0.9032,
       "support": 15.0
     },
     "Cháy cuộn dây / cháy motor": {
-      "precision": 0.8,
-      "recall": 0.8,
-      "f1-score": 0.8,
+      "precision": 0.8125,
+      "recall": 0.8667,
+      "f1-score": 0.8387,
       "support": 15.0
     },
     "Sự cố điện": {
-      "precision": 0.6667,
-      "recall": 0.5333,
-      "f1-score": 0.5926,
+      "precision": 0.7059,
+      "recall": 0.8,
+      "f1-score": 0.75,
       "support": 15.0
     },
     "Quá tải cơ khí": {
-      "precision": 0.65,
-      "recall": 0.8667,
-      "f1-score": 0.7429,
+      "precision": 0.9333,
+      "recall": 0.9333,
+      "f1-score": 0.9333,
       "support": 15.0
     },
     "Rò rỉ hệ thống": {
-      "precision": 0.8571,
-      "recall": 0.8,
-      "f1-score": 0.8276,
+      "precision": 0.9375,
+      "recall": 1.0,
+      "f1-score": 0.9677,
       "support": 15.0
     },
     "Hư hỏng cơ khí": {
-      "precision": 0.5172,
+      "precision": 0.8824,
       "recall": 1.0,
-      "f1-score": 0.6818,
+      "f1-score": 0.9375,
       "support": 15.0
     },
     "Âm thanh bất thường": {
-      "precision": 0.7692,
-      "recall": 0.6667,
-      "f1-score": 0.7143,
+      "precision": 1.0,
+      "recall": 0.8667,
+      "f1-score": 0.9286,
       "support": 15.0
     },
     "Giảm hiệu suất": {
-      "precision": 0.9231,
-      "recall": 0.8,
-      "f1-score": 0.8571,
+      "precision": 1.0,
+      "recall": 0.9333,
+      "f1-score": 0.9655,
       "support": 15.0
     }
   },
   "engine": "phobert",
   "latency": {
-    "mean_ms": 31.01,
-    "min_ms": 22.23,
-    "max_ms": 50.15,
-    "p95_ms": 35.33
+    "mean_ms": 30.46,
+    "min_ms": 22.5,
+    "max_ms": 36.21,
+    "p95_ms": 34.1
   }
 }

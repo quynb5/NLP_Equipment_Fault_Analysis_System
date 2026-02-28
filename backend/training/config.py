@@ -16,6 +16,7 @@ TEST_DATASET_PATH = BACKEND_DIR / "evaluation" / "test_dataset.json"
 
 # Model output
 TFIDF_MODEL_DIR = BACKEND_DIR / "resources" / "tfidf"
+PHOBERT_FINETUNED_DIR = BACKEND_DIR / "resources" / "phobert-finetuned"
 
 # ========================
 # TF-IDF VECTORIZER
@@ -51,3 +52,16 @@ AUGMENT_MULTIPLIER = 2  # Mỗi sample gốc tạo thêm N sample augmented
 # VERSIONING
 # ========================
 MODEL_VERSION = "1.0.0"
+
+# ========================
+# PHOBERT FINE-TUNING
+# ========================
+PHOBERT_EPOCHS = 20
+PHOBERT_LR = 2e-5
+PHOBERT_BATCH_SIZE = 8
+PHOBERT_WARMUP_RATIO = 0.1
+PHOBERT_WEIGHT_DECAY = 0.01
+PHOBERT_DROPOUT = 0.3
+PHOBERT_MAX_LENGTH = 256
+PHOBERT_NUM_CLASSES = 10
+PHOBERT_FREEZE_EMBEDDINGS = True   # Freeze embedding layer to save memory

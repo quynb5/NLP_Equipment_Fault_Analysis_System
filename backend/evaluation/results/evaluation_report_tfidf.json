@@ -67,9 +67,9 @@
   },
   "engine": "tfidf",
   "latency": {
-    "mean_ms": 2.94,
-    "min_ms": 2.77,
-    "max_ms": 4.5,
-    "p95_ms": 3.32
+    "mean_ms": 2.96,
+    "min_ms": 2.71,
+    "max_ms": 4.24,
+    "p95_ms": 3.68
   }
 }
